@@ -1,0 +1,84 @@
+# Archivos de sistema y temporales
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*~
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Variables de entorno - IMPORTANTE
+.env
+.env.local
+.env.*.local
+*.env
+
+# Archivos de build
+dist/
+build/
+.cache/
+
+# Dependencias de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+ENV/
+env/
+
+# IDE y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vs/
+
+# Archivos de configuración local
+*.local
+
+# Certificados y llaves
+*.pem
+*.key
+*.cert
+
+# Bases de datos locales
+*.sqlite
+*.db
+
+# Archivos grandes o binarios temporales
+*.zip
+*.tar.gz
+*.rar
+
+# Carpetas de generación automática
+.next/
+.nuxt/
+.output/
+.vercel/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Archivos de respaldo
+*.bak
+*.backup
+*~
+
+# Logs de aplicación
+logs/
+*.log
+
+# Archivos de Google Drive que no se pueden versionar
+*.gdoc
+*.gsheet
+*.gslides
+*.gdraw
