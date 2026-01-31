@@ -11,104 +11,49 @@ const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative pt-32 pb-20 min-h-screen flex items-center overflow-hidden">
-                <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
-                    <img alt="Coffee texture background" className="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAetcaf45v-4SGtm1agWKBkRAv1cm287VvB2k6ZVSKxKXZb1iPMpsi1MIbahd20gt-pdnUt1tM0uBGDS2ueIA5qGHdxoULS_ZZlE8ers04TVVjmm4-LabFijS2J2l3NalRgb82yzuHcd3e3liJN48f_0gNgAP35OgKf3HiXmYpnqpyyLBMWCqtgGb0skh-1RlC72BrfYWoULoFqq4lTOu1BP88tq6YhTmeB1j9dnYuBBm4pYxKdaI8D3e2TGCSOi1fwcaJRNXhX2y42"/>
+            {/* Hero Section Inmersivo "La Firma de la Tierra" */}
+            <header className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        alt="Misty Sierra Nevada Mountains"
+                        className="w-full h-full object-cover opacity-80 dark:opacity-60 filter brightness-50"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcfAtXK3rO0DtljnnG98PWskBu0QIToFPcvB-G_wdSE1gYPoRefQj9wBEQwIF1hyVZEJIeb9EX1GyHYkuUrgDl3yDsLWABFaFGrYkdWG0MuXBAnm-uy7guEIXcwo1KUzQBE78bHQOH32lkwEQYosLe-sT-OvYBvUKE9XCyXSRjb-jsEVJAc4qcVT6dcVDtct1NHtwEezMsCd_rOzArG4Nd6VvlZ6HsfdzvFmMQ728789xZkrYQn6BZWo_kNRNpp5E6D5h2tQv6Lqep"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-background-dark/60 via-transparent to-background-light dark:to-background-dark h-full"></div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background-light/50 to-background-light dark:via-background-dark/50 dark:to-background-dark z-0"></div>
-                
-                {/* Grid Layout Restored */}
-                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-                    
-                    {/* Decorative Shapes Column (Images Removed, Position Adjusted) */}
-                    <div className="relative flex justify-center order-2 lg:order-1 h-[500px] lg:h-[600px] items-center">
-                        <div className="relative w-full h-full animate-float">
-                            {/* Decorative Circles (Background) - Lifted to 32% top to clear text boxes */}
-                            <div className="absolute top-[32%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] border border-primary/30 rounded-full pointer-events-none z-0"></div>
-                            <div className="absolute top-[32%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] lg:w-[480px] lg:h-[480px] border border-dashed border-primary/20 rounded-full animate-spin-slow pointer-events-none z-0"></div>
-                            <div className="absolute top-[32%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] bg-primary/5 rounded-full blur-3xl pointer-events-none z-0"></div>
-                        </div>
-                    </div>
 
-                    {/* Text Column */}
-                    <div className="order-1 lg:order-2 space-y-8 text-center lg:text-left">
-                        <div>
-                            <span className="font-accent text-primary tracking-[0.2em] text-sm uppercase block mb-2">{t('home.hero.badge')}</span>
-                            <h1 className="font-display text-5xl lg:text-7xl text-gray-900 dark:text-white mb-4 leading-tight">
-                                {t('home.hero.title_prefix')} <span className="text-primary italic">Malu</span>
-                            </h1>
-                            <div className="flex items-center justify-center lg:justify-start space-x-1 text-primary text-sm mb-6">
-                                {[1,2,3,4,5].map(i => <span key={i} className="material-icons-outlined text-base">star</span>)}
-                                <span className="ml-2 text-gray-500 dark:text-gray-400 font-sans text-xs tracking-wide">(124 {t('home.reviews')})</span>
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                            {['Fruity', 'Chocolate', 'Citrus'].map(tag => (
-                                <span key={tag} className="px-4 py-1.5 border border-primary/40 text-primary text-xs font-bold uppercase tracking-widest rounded-full">{tag}</span>
-                            ))}
-                        </div>
-                        <p className="font-body text-gray-600 dark:text-gray-300 leading-relaxed text-lg max-w-xl mx-auto lg:mx-0">
-                            {t('home.desc')}
-                        </p>
-                        
-                        {/* Purchase Selection */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto lg:mx-0">
-                            <label className="relative cursor-pointer group" onClick={() => setPurchaseType('subscribe')}>
-                                <input type="radio" name="purchase_type" className="peer sr-only" checked={purchaseType === 'subscribe'} readOnly />
-                                <div className={`p-5 rounded-lg border-2 ${purchaseType === 'subscribe' ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-gray-300 dark:border-gray-700 bg-white dark:bg-transparent'} transition-all shadow-md h-full flex flex-col justify-between text-left`}>
-                                    {/* Adjusted Header Layout to prevent overlap */}
-                                    <div className="flex flex-wrap items-center gap-2 mb-2 pr-8">
-                                        <span className="font-accent text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">{t('home.sub_save')}</span>
-                                        <span className="bg-primary text-black text-[10px] font-bold px-2 py-0.5 rounded uppercase whitespace-nowrap">{t('home.best_value')}</span>
-                                    </div>
-                                    <div>
-                                        <span className="block text-3xl font-display text-primary">{formatPrice(18.00)}</span>
-                                        <span className="text-xs text-gray-500">{t('home.sub_details')}</span>
-                                    </div>
-                                    <div className={`absolute top-4 right-4 text-primary transition-opacity ${purchaseType === 'subscribe' ? 'opacity-100' : 'opacity-0'}`}>
-                                        <span className="material-icons-outlined">check_circle</span>
-                                    </div>
-                                </div>
-                            </label>
-                            <label className="relative cursor-pointer group" onClick={() => setPurchaseType('onetime')}>
-                                <input type="radio" name="purchase_type" className="peer sr-only" checked={purchaseType === 'onetime'} readOnly />
-                                <div className={`p-5 rounded-lg border hover:border-primary/50 ${purchaseType === 'onetime' ? 'border-primary' : 'border-gray-300 dark:border-gray-700 bg-white dark:bg-transparent opacity-80 hover:opacity-100'} transition-all h-full flex flex-col justify-between text-left`}>
-                                    <div className="flex justify-between items-start mb-2">
-                                        <span className="font-accent text-sm font-bold text-gray-900 dark:text-gray-300 uppercase tracking-wider">{t('home.onetime')}</span>
-                                    </div>
-                                    <div>
-                                        <span className="block text-3xl font-display text-gray-700 dark:text-gray-400">{formatPrice(22.00)}</span>
-                                        <span className="text-xs text-gray-500">{t('home.single_purchase')}</span>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
+                <div className="relative z-10 text-center px-4 mt-16 max-w-4xl mx-auto">
+                    <h2 className="font-accent text-primary text-sm sm:text-base tracking-[0.4em] mb-4 uppercase animate-fade-up">
+                        {t('home.hero.badge')}
+                    </h2>
+                    <h1 className="font-display text-white text-5xl sm:text-7xl lg:text-8xl mb-6 tracking-wide drop-shadow-lg animate-fade-up" style={{ animationDelay: '0.2s' }}>
+                        LA FIRMA DE LA <span className="text-primary italic">TIERRA</span>
+                    </h1>
+                    <p className="font-body text-gray-200 text-lg sm:text-xl tracking-widest uppercase mb-12 animate-fade-up max-w-2xl mx-auto" style={{ animationDelay: '0.4s' }}>
+                        {t('home.desc')}
+                    </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-                            <button 
-                                onClick={() => navigate('/subscription')}
-                                className="bg-primary hover:bg-yellow-600 text-black font-accent font-bold text-sm tracking-widest uppercase px-8 py-4 rounded shadow-lg hover:shadow-primary/30 transition-all transform hover:-translate-y-1 w-full sm:w-auto"
-                            >
-                                {t('home.add_cart')}
-                            </button>
-                            <button 
-                                onClick={() => navigate('/guide')}
-                                className="border border-gray-400 dark:border-gray-600 text-gray-900 dark:text-white font-accent font-bold text-sm tracking-widest uppercase px-8 py-4 rounded hover:bg-gray-100 dark:hover:bg-white/5 transition-all w-full sm:w-auto"
-                            >
-                                {t('home.learn_more')}
-                            </button>
-                        </div>
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-up" style={{ animationDelay: '0.6s' }}>
+                        <button
+                            onClick={() => navigate('/subscription')}
+                            className="bg-primary hover:bg-primary-hover text-background-dark font-display font-bold text-sm tracking-[0.2em] uppercase px-10 py-4 border border-primary transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(200,170,110,0.3)]"
+                        >
+                            {t('home.add_cart')}
+                        </button>
+                        <button
+                            onClick={() => navigate('/guide')}
+                            className="bg-transparent hover:bg-white/10 text-white font-display font-bold text-sm tracking-[0.2em] uppercase px-10 py-4 border border-white/30 hover:border-white transition-all duration-300 backdrop-blur-sm"
+                        >
+                            {t('home.learn_more')}
+                        </button>
                     </div>
                 </div>
-                
-                {/* SVG Separator */}
-                <div className="absolute bottom-0 w-full overflow-hidden leading-[0]">
-                    <svg className="relative block w-[calc(100%+1.3px)] h-[80px] text-surface-light dark:text-surface-dark fill-current" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
-                        <path className="fill-background-light dark:fill-background-dark" d="M1200 120L0 16.48 0 0 1200 0 1200 120z"></path>
-                        <path className="fill-surface-light dark:fill-surface-dark opacity-100" d="M0,60 L50,80 L100,50 L150,90 L200,60 L250,100 L300,70 L350,90 L400,60 L450,100 L500,70 L550,90 L600,60 L650,100 L700,70 L750,90 L800,60 L850,100 L900,70 L950,90 L1000,60 L1050,100 L1100,70 L1150,90 L1200,60 V120 H0 V60 Z"></path>
-                    </svg>
+
+                {/* Scroll Indicator */}
+                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                    <span className="material-icons-outlined text-white/50 text-3xl">keyboard_arrow_down</span>
                 </div>
-            </section>
+            </header>
 
             {/* Story Section */}
             <section className="py-24 bg-surface-light dark:bg-surface-dark relative">
@@ -157,7 +102,7 @@ const HomePage: React.FC = () => {
                             <p className="font-body text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-8">
                                 {t('home.trace_desc')}
                             </p>
-                            <img alt="Coffee Map" className="w-full rounded-lg opacity-80 filter sepia grayscale hover:grayscale-0 transition-all duration-500 shadow-xl border border-gray-200 dark:border-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO5Q1YykryEvYoIHTpXI7jpv2OrcvGw4-J2vABWKMo6aSE5H6muzX7eBmpkE36f9yXBODbF-85LO2AbBB-Qw1iyOgWtjOK0FW16Vfo5uN0xWn8tHSAms_Rb-MoSZM3-hhX1P6ijvYh6JPtbLlSAYOtLJpnVmrDePvopUPIqzfc7eiuP4J40jxnUxVUMNHE3wTfDrmapj3Ko9msvwaPD2RrUw4oz10YE_Y1CMSv8clYJvxmzwjzM76zDzliifEFBbrVkardtyl1B1Wn"/>
+                            <img alt="Coffee Map" className="w-full rounded-lg opacity-80 filter sepia grayscale hover:grayscale-0 transition-all duration-500 shadow-xl border border-gray-200 dark:border-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO5Q1YykryEvYoIHTpXI7jpv2OrcvGw4-J2vABWKMo6aSE5H6muzX7eBmpkE36f9yXBODbF-85LO2AbBB-Qw1iyOgWtjOK0FW16Vfo5uN0xWn8tHSAms_Rb-MoSZM3-hhX1P6ijvYh6JPtbLlSAYOtLJpnVmrDePvopUPIqzfc7eiuP4J40jxnUxVUMNHE3wTfDrmapj3Ko9msvwaPD2RrUw4oz10YE_Y1CMSv8clYJvxmzwjzM76zDzliifEFBbrVkardtyl1B1Wn" />
                         </div>
                         <div className="lg:col-span-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-primary/20 bg-surface-light dark:bg-surface-dark shadow-2xl">

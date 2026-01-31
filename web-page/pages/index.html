@@ -7,8 +7,8 @@
     <title>Origen Sierra Nevada - Premium Coffee Experience</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="../../images/logo-Origen/La-firma-de-la-tierra.svg">
-    <link rel="apple-touch-icon" href="../../images/logo-Origen/La-firma-de-la-tierra.svg">
+    <link rel="icon" type="image/svg+xml" href="public/favicon-light.svg">
+    <link rel="apple-touch-icon" href="public/favicon-light.svg">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
@@ -31,12 +31,12 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#C5A065", // Unified Gold
-                        "primary-hover": "#B08D55",
-                        "background-light": "#F9F8F6",
-                        "background-dark": "#0B120D", // Deep Forest/Charcoal
+                        primary: "#C8AA6E", // Dorado Sierra (Unified Gold)
+                        "primary-hover": "#B6965A",
+                        "background-light": "#F9F8F6", // Mist White
+                        "background-dark": "#141E16", // Verde Origen Profundo (Deep Forest)
                         "surface-light": "#FFFFFF",
-                        "surface-dark": "#16201A", // Lighter Forest Green
+                        "surface-dark": "#1C2923", // Lighter Forest Green
                         "text-main-light": "#1A1A1A",
                         "text-main-dark": "#EAEAEA",
                         "text-muted": "#8A8A8A",
@@ -45,19 +45,25 @@
                         display: ["'Playfair Display'", "serif"],
                         accent: ["Cinzel", "serif"],
                         body: ["'Lato'", "'Montserrat'", "sans-serif"],
+                        organic: ["'Papyrus'", "fantasy"],
                     },
                     backgroundImage: {
                         'mountain-pattern': "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
                     },
                     animation: {
                         'float': 'float 8s ease-in-out infinite',
-                        'spin-slow': 'spin 400s linear infinite', // Slowed down significantly
+                        'spin-slow': 'spin 400s linear infinite',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-up': 'fadeUp 1s ease-out forwards',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-6px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 },
@@ -130,24 +136,26 @@
             }
         }
     </style>
-    <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
-  }
-}
-</script>
-    <link rel="stylesheet" href="/index.css">
+    <!-- React & ReactDOM (UMD) -->
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+
+    <!-- React Router (UMD) -->
+    <script crossorigin src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link rel="stylesheet" href="./index.css">
 </head>
 
 <body
     class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-body transition-colors duration-300">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <!-- Load index.tsx as Babel script -->
+    <script type="text/babel" src="./index.tsx"></script>
 </body>
 
 </html>

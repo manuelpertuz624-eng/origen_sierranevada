@@ -48,88 +48,80 @@ const Navbar: React.FC = () => {
         setIsMobileMenuOpen(false);
     }, [navigate]);
 
-    // Handle Search
-    const searchResults = [
-        { title: t('nav.sub'), path: '/subscription', type: 'Page' },
-        { title: t('nav.guide'), path: '/guide', type: 'Page' },
-        { title: t('nav.ai'), path: '/ai-lab', type: 'Tool' },
-        { title: 'Café Malu', path: '/', type: 'Product' },
-    ].filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    // Scroll state for transparency
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // ... (rest of search/cart logic)
 
     return (
         <>
-            <nav className="fixed w-full z-40 top-0 transition-all duration-300 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-primary/20 shadow-sm">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <nav className={`fixed w-full z-50 top-0 transition-all duration-500 ${isScrolled
+                    ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
+                    : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
+                }`}>
+                <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="lg:hidden text-gray-800 dark:text-white p-2 hover:bg-gray-200 dark:hover:bg-white/10 rounded-full transition-colors"
+                        className={`lg:hidden p-2 rounded-full transition-colors ${isScrolled ? 'text-white hover:bg-white/10' : 'text-white hover:text-primary'}`}
                     >
                         <span className="material-icons-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
                     </button>
 
-                    {/* Logo */}
+                    {/* Logo (Centered in Mobile, Left in Desktop) */}
                     <div
                         className="flex items-center gap-3 group cursor-pointer"
                         onClick={() => navigate('/')}
                     >
                         <img
-                            src="../../images/logo-Origen/La-firma-de-la-tierra.svg"
+                            src="public/favicon-light.svg"
                             alt="Origen Sierra Nevada"
-                            className="h-8 w-auto group-hover:brightness-110 transition-all"
+                            className={`transition-all duration-500 ${isScrolled ? 'h-10' : 'h-12'} w-auto drop-shadow-md`}
                         />
-                        <div className="flex flex-col" style={{ width: '140px' }}>
-                            <div
-                                className="font-accent text-primary flex justify-between w-full"
-                                style={{
-                                    fontSize: '0.65rem',
-                                    fontWeight: 900,
-                                    letterSpacing: '0.05em',
-                                    lineHeight: 1,
-                                    marginBottom: '0.15rem'
-                                }}
-                            >
-                                <span>O</span><span>R</span><span>I</span><span>G</span><span>E</span><span>N</span>
+                        <div className="flex flex-col hidden sm:flex">
+                            <div className="font-display font-bold text-white tracking-[0.1em] text-lg leading-none mb-1">
+                                ORIGEN
                             </div>
-                            <div
-                                className="font-body text-primary/80 flex justify-between w-full"
-                                style={{
-                                    fontSize: '0.4rem',
-                                    fontWeight: 300,
-                                    letterSpacing: '0.1em',
-                                    lineHeight: 1
-                                }}
-                            >
-                                <span>S</span><span>I</span><span>E</span><span>R</span><span>R</span><span>A</span><span> </span><span>N</span><span>E</span><span>V</span><span>A</span><span>D</span><span>A</span>
+                            <div className="font-accent text-primary tracking-[0.2em] text-[0.6rem] leading-none">
+                                SIERRA NEVADA
                             </div>
                         </div>
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="flex items-center space-x-2 md:space-x-6 text-gray-800 dark:text-white">
+                    <div className="flex items-center space-x-4 text-white">
                         <button
                             onClick={() => navigate('/ai-lab')}
-                            className="hidden lg:flex items-center gap-1 hover:text-primary transition-colors font-accent text-xs font-bold tracking-widest px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5"
+                            className={`hidden lg:flex items-center gap-2 transition-all font-accent text-xs tracking-widest px-4 py-2 rounded-sm border ${isScrolled ? 'border-primary/50 text-white hover:bg-primary hover:border-primary' : 'border-white/30 text-white hover:bg-white/10'
+                                }`}
                         >
-                            <span className="material-icons-outlined text-lg">science</span>
+                            <span className="material-icons-outlined text-sm">science</span>
                             {t('nav.ai')}
                         </button>
 
                         <button
                             onClick={() => setIsSearchOpen(true)}
-                            className="hidden lg:block p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:text-primary transition-colors"
+                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
                         >
                             <span className="material-icons-outlined">search</span>
                         </button>
 
                         <div
-                            className="relative cursor-pointer p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:text-primary transition-colors"
+                            className="relative cursor-pointer p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
                             onClick={() => setIsCartOpen(true)}
                         >
                             <span className="material-icons-outlined">shopping_bag</span>
                             {cartItems.length > 0 && (
-                                <span className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full animate-pulse">
+                                <span className="absolute top-0 right-0 bg-primary text-background-dark text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
                                     {cartItems.length}
                                 </span>
                             )}
@@ -138,11 +130,10 @@ const Navbar: React.FC = () => {
                         {/* Language Toggle */}
                         <button
                             onClick={toggleLanguage}
-                            className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors group"
-                            title="Cambiar Idioma / Change Language"
+                            className="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors group"
+                            title="Cambiar Idioma"
                         >
-                            <span className="material-icons-outlined text-gray-800 dark:text-white group-hover:text-primary transition-colors">language</span>
-                            <span className="ml-1 text-xs font-bold text-gray-800 dark:text-white group-hover:text-primary uppercase w-6 text-center">{language}</span>
+                            <span className="font-accent text-xs text-white group-hover:text-primary">{language.toUpperCase()}</span>
                         </button>
 
                         <DarkModeToggle />
