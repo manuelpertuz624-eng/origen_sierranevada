@@ -28,7 +28,7 @@ Plataforma digital completa para presentar y comercializar café de origen premi
 
 ### Tipografías
 - **Display** Playfair Display - Titulares elegantes y editoriales
-- **Body**: Montserrat - Textos de cuerpo y navegación
+- **Body**: Papyrus - Tipografía distintiva para subtítulo del logo (SIERRA NEVADA)
 
 ---
 

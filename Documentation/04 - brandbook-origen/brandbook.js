@@ -6,55 +6,44 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // ========================================
-    // 1. STICKY HEADER & SCROLL EFFECTS
+    // 1. SIDEBAR TOGGLE (MOBILE)
     // ========================================
-    const header = document.getElementById('header') || document.querySelector('header');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-
-    // ========================================
-    // 2. MOBILE MENU TOGGLE
-    // ========================================
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function () {
-            mobileMenu.classList.toggle('active');
-
-            // Toggle icon
-            const icon = this.querySelector('.material-symbols-outlined');
-            if (mobileMenu.classList.contains('active')) {
-                icon.textContent = 'close';
-            } else {
-                icon.textContent = 'menu';
-            }
+    if (sidebarToggle && sidebar && sidebarOverlay) {
+        // Open sidebar
+        sidebarToggle.addEventListener('click', function () {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
         });
 
-        // Close mobile menu when clicking on a link
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
+        // Close sidebar when clicking overlay
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Close sidebar when clicking on a link (mobile)
+        const sidebarLinks = sidebar.querySelectorAll('.nav-link-sidebar');
+        sidebarLinks.forEach(link => {
             link.addEventListener('click', function () {
-                mobileMenu.classList.remove('active');
-                const icon = mobileMenuBtn.querySelector('.material-symbols-outlined');
-                icon.textContent = 'menu';
+                if (window.innerWidth < 1024) { // lg breakpoint
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                }
             });
         });
     }
 
     // ========================================
-    // 3. SMOOTH SCROLL & ACTIVE NAVIGATION
+    // 2. SMOOTH SCROLL & ACTIVE NAVIGATION
     // ========================================
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll('.nav-link-sidebar');
     const sections = document.querySelectorAll('section[id]');
 
-    // Smooth scroll (fallback for browsers that don't support CSS scroll-behavior)
+    // Smooth scroll
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -62,8 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const targetSection = document.querySelector(targetId);
 
             if (targetSection) {
-                const headerHeight = header.offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
+                const targetPosition = targetSection.offsetTop;
 
                 window.scrollTo({
                     top: targetPosition,
@@ -76,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update active navigation link on scroll
     function updateActiveNav() {
         let current = '';
-        const scrollPosition = window.scrollY + header.offsetHeight + 100;
+        const scrollPosition = window.scrollY + 200;
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;

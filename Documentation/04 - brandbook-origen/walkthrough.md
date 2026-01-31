@@ -28,7 +28,7 @@ Archivo JavaScript con 10 funcionalidades interactivas implementadas.
 
 - **Tipografía Premium**:
   - **Playfair Display**: Fuente serif para titulares elegantes y editoriales
-  - **Montserrat**: Fuente sans-serif para textos de cuerpo y navegación
+  - **Papyrus**: Fuente fantasy/serif distintiva para el subtítulo del logo (SIERRA NEVADA)
   - **Manrope**: Fuente display para sistema de diseño
 
 ### 2. **Navegación Interactiva**

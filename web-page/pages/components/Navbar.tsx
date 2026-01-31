@@ -8,7 +8,7 @@ const DarkModeToggle = () => {
     };
 
     return (
-        <button 
+        <button
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-surface-dark transition-colors text-gray-800 dark:text-white"
             title="Toggle Theme"
@@ -22,7 +22,7 @@ const DarkModeToggle = () => {
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const { language, toggleLanguage, t, formatPrice } = useLanguage();
-    
+
     // State for interactions
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
@@ -60,9 +60,9 @@ const Navbar: React.FC = () => {
         <>
             <nav className="fixed w-full z-40 top-0 transition-all duration-300 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-primary/20 shadow-sm">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                    
+
                     {/* Mobile Menu Button */}
-                    <button 
+                    <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         className="lg:hidden text-gray-800 dark:text-white p-2 hover:bg-gray-200 dark:hover:bg-white/10 rounded-full transition-colors"
                     >
@@ -70,32 +70,60 @@ const Navbar: React.FC = () => {
                     </button>
 
                     {/* Logo */}
-                    <div 
-                        className="flex flex-col items-center group cursor-pointer"
+                    <div
+                        className="flex items-center gap-3 group cursor-pointer"
                         onClick={() => navigate('/')}
                     >
-                        <span className="font-accent text-[10px] md:text-xs tracking-[0.3em] text-primary mb-1 group-hover:text-amber-300 transition-colors">ORIGEN</span>
-                        <h1 className="font-display text-xl md:text-2xl font-bold tracking-wider text-gray-900 dark:text-white group-hover:text-primary transition-colors">SIERRA NEVADA</h1>
+                        <img
+                            src="../../images/logo-Origen/La-firma-de-la-tierra.svg"
+                            alt="Origen Sierra Nevada"
+                            className="h-8 w-auto group-hover:brightness-110 transition-all"
+                        />
+                        <div className="flex flex-col" style={{ width: '140px' }}>
+                            <div
+                                className="font-accent text-primary flex justify-between w-full"
+                                style={{
+                                    fontSize: '0.65rem',
+                                    fontWeight: 900,
+                                    letterSpacing: '0.05em',
+                                    lineHeight: 1,
+                                    marginBottom: '0.15rem'
+                                }}
+                            >
+                                <span>O</span><span>R</span><span>I</span><span>G</span><span>E</span><span>N</span>
+                            </div>
+                            <div
+                                className="font-body text-primary/80 flex justify-between w-full"
+                                style={{
+                                    fontSize: '0.4rem',
+                                    fontWeight: 300,
+                                    letterSpacing: '0.1em',
+                                    lineHeight: 1
+                                }}
+                            >
+                                <span>S</span><span>I</span><span>E</span><span>R</span><span>R</span><span>A</span><span> </span><span>N</span><span>E</span><span>V</span><span>A</span><span>D</span><span>A</span>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Desktop Actions */}
                     <div className="flex items-center space-x-2 md:space-x-6 text-gray-800 dark:text-white">
-                        <button 
+                        <button
                             onClick={() => navigate('/ai-lab')}
                             className="hidden lg:flex items-center gap-1 hover:text-primary transition-colors font-accent text-xs font-bold tracking-widest px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5"
                         >
                             <span className="material-icons-outlined text-lg">science</span>
                             {t('nav.ai')}
                         </button>
-                        
-                        <button 
+
+                        <button
                             onClick={() => setIsSearchOpen(true)}
                             className="hidden lg:block p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:text-primary transition-colors"
                         >
                             <span className="material-icons-outlined">search</span>
                         </button>
-                        
-                        <div 
+
+                        <div
                             className="relative cursor-pointer p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:text-primary transition-colors"
                             onClick={() => setIsCartOpen(true)}
                         >
@@ -106,15 +134,15 @@ const Navbar: React.FC = () => {
                                 </span>
                             )}
                         </div>
-                        
+
                         {/* Language Toggle */}
-                        <button 
+                        <button
                             onClick={toggleLanguage}
                             className="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors group"
                             title="Cambiar Idioma / Change Language"
                         >
-                             <span className="material-icons-outlined text-gray-800 dark:text-white group-hover:text-primary transition-colors">language</span>
-                             <span className="ml-1 text-xs font-bold text-gray-800 dark:text-white group-hover:text-primary uppercase w-6 text-center">{language}</span>
+                            <span className="material-icons-outlined text-gray-800 dark:text-white group-hover:text-primary transition-colors">language</span>
+                            <span className="ml-1 text-xs font-bold text-gray-800 dark:text-white group-hover:text-primary uppercase w-6 text-center">{language}</span>
                         </button>
 
                         <DarkModeToggle />
@@ -125,30 +153,30 @@ const Navbar: React.FC = () => {
             {/* Mobile Menu Drawer */}
             <div className={`fixed inset-0 z-30 bg-background-light dark:bg-background-dark pt-24 px-6 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'} lg:hidden`}>
                 <div className="flex flex-col gap-6">
-                     <Link to="/" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.home')}</Link>
-                     <Link to="/subscription" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.sub')}</Link>
-                     <Link to="/guide" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.guide')}</Link>
-                     <Link to="/ai-lab" className="text-2xl font-display font-bold text-primary border-b border-primary/30 pb-4 flex items-center justify-between">
+                    <Link to="/" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.home')}</Link>
+                    <Link to="/subscription" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.sub')}</Link>
+                    <Link to="/guide" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.guide')}</Link>
+                    <Link to="/ai-lab" className="text-2xl font-display font-bold text-primary border-b border-primary/30 pb-4 flex items-center justify-between">
                         {t('nav.ai')} <span className="material-icons-outlined">science</span>
-                     </Link>
-                     <button 
+                    </Link>
+                    <button
                         onClick={() => setIsSearchOpen(true)}
                         className="text-left text-lg font-body text-gray-600 dark:text-gray-400 flex items-center gap-2 mt-4"
-                     >
+                    >
                         <span className="material-icons-outlined">search</span> {t('nav.search_placeholder')}
-                     </button>
-                     <button 
+                    </button>
+                    <button
                         onClick={toggleLanguage}
                         className="text-left text-lg font-body text-gray-600 dark:text-gray-400 flex items-center gap-2 mt-4 border-t border-gray-200 dark:border-gray-800 pt-4"
-                     >
+                    >
                         <span className="material-icons-outlined">language</span> {language === 'es' ? 'Cambiar a English' : 'Switch to Español'}
-                     </button>
+                    </button>
                 </div>
             </div>
 
             {/* Cart Drawer */}
             <div className={`fixed inset-0 z-50 pointer-events-none overflow-hidden ${isCartOpen ? 'pointer-events-auto' : ''}`}>
-                <div 
+                <div
                     className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isCartOpen ? 'opacity-100' : 'opacity-0'}`}
                     onClick={() => setIsCartOpen(false)}
                 ></div>
@@ -159,7 +187,7 @@ const Navbar: React.FC = () => {
                             <span className="material-icons-outlined text-2xl">close</span>
                         </button>
                     </div>
-                    
+
                     <div className="flex-1 overflow-y-auto p-6 space-y-6">
                         {cartItems.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -207,15 +235,15 @@ const Navbar: React.FC = () => {
                         <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400">
                             <span className="material-icons-outlined text-3xl">search</span>
                         </span>
-                        <input 
+                        <input
                             autoFocus={isSearchOpen}
-                            type="text" 
-                            placeholder={t('nav.search_placeholder')} 
+                            type="text"
+                            placeholder={t('nav.search_placeholder')}
                             className="w-full bg-transparent border-none text-4xl font-display text-white placeholder-gray-600 pl-14 py-6 focus:ring-0"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <button 
+                        <button
                             onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
                             className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-2"
                         >
@@ -229,8 +257,8 @@ const Navbar: React.FC = () => {
                                 <p className="text-primary font-accent text-xs tracking-widest uppercase mb-6">{t('nav.search_results')}</p>
                                 {searchResults.length > 0 ? (
                                     searchResults.map((result, idx) => (
-                                        <div 
-                                            key={idx} 
+                                        <div
+                                            key={idx}
                                             onClick={() => { navigate(result.path); setIsSearchOpen(false); }}
                                             className="group flex items-center justify-between p-4 rounded-lg hover:bg-white/5 cursor-pointer border border-transparent hover:border-white/10 transition-all animate-fade-in"
                                             style={{ animationDelay: `${idx * 50}ms` }}
@@ -250,13 +278,13 @@ const Navbar: React.FC = () => {
                             </div>
                         )}
                         {!searchQuery && (
-                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-50">
-                                 {['Pour Over', 'Beans', 'Espresso', 'AI Tools'].map(tag => (
-                                     <button key={tag} onClick={() => setSearchQuery(tag)} className="p-4 border border-white/10 rounded hover:bg-white/5 text-gray-400 hover:text-primary transition-colors text-left">
-                                         {tag}
-                                     </button>
-                                 ))}
-                             </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-50">
+                                {['Pour Over', 'Beans', 'Espresso', 'AI Tools'].map(tag => (
+                                    <button key={tag} onClick={() => setSearchQuery(tag)} className="p-4 border border-white/10 rounded hover:bg-white/5 text-gray-400 hover:text-primary transition-colors text-left">
+                                        {tag}
+                                    </button>
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>
