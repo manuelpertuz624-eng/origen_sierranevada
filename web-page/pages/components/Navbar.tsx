@@ -61,11 +61,17 @@ const Navbar: React.FC = () => {
 
     // ... (rest of search/cart logic)
 
+    const searchResults = [
+        { title: 'Café Malu', type: 'Product', path: '/subscription' },
+        { title: 'Guía de Preparación', type: 'Page', path: '/guide' },
+        { title: 'Laboratorio IA', type: 'Tool', path: '/ai-lab' }
+    ].filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
     return (
         <>
             <nav className={`fixed w-full z-50 top-0 transition-all duration-500 ${isScrolled
-                    ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
-                    : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
+                ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
+                : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
                 }`}>
                 <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
 

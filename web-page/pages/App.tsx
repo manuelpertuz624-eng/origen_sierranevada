@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage';
 import SubscriptionPage from './pages/SubscriptionPage';
 import BrewingGuidePage from './pages/BrewingGuidePage';
 import AiLabPage from './pages/AiLabPage';
+import BrandbookPage from './pages/BrandbookPage';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import ChatWidget from './components/ChatWidget';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -29,6 +31,14 @@ const App: React.FC = () => {
                         <Route path="/subscription" element={<SubscriptionPage />} />
                         <Route path="/guide" element={<BrewingGuidePage />} />
                         <Route path="/ai-lab" element={<AiLabPage />} />
+                        <Route
+                            path="/brandbook"
+                            element={
+                                <ProtectedRoute requireAdmin={true}>
+                                    <BrandbookPage />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                     <ChatWidget />
                 </div>

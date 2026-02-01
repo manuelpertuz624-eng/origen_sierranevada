@@ -329,6 +329,9 @@
     <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
 
+    <!-- Supabase JS (UMD) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Babel Standalone -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
@@ -339,7 +342,7 @@
     class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-body transition-colors duration-300">
     <div id="root"></div>
     <!-- Load index.tsx as Babel script -->
-    <script type="text/babel" src="./index.tsx"></script>
+    <script type="module" src="./main.tsx"></script>
 </body>
 
 </html>
