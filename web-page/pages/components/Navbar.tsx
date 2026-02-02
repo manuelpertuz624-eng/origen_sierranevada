@@ -59,6 +59,7 @@ const Navbar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+
     // ... (rest of search/cart logic)
     const searchResults: any[] = [];
 
