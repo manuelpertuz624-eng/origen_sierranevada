@@ -60,12 +60,13 @@ const Navbar: React.FC = () => {
     }, []);
 
     // ... (rest of search/cart logic)
+    const searchResults: any[] = [];
 
     return (
         <>
             <nav className={`fixed w-full z-50 top-0 transition-all duration-500 ${isScrolled
-                    ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
-                    : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
+                ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
+                : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
                 }`}>
                 <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
@@ -83,10 +84,11 @@ const Navbar: React.FC = () => {
                         onClick={() => navigate('/')}
                     >
                         <img
-                            src="public/favicon-light.svg"
+                            src="/logo-origen-sierra-nevada.svg"
                             alt="Origen Sierra Nevada"
                             className={`transition-all duration-500 ${isScrolled ? 'h-10' : 'h-12'} w-auto drop-shadow-md`}
                         />
+                        {/* Text hidden as it is included in the new logo
                         <div className="flex flex-col hidden sm:flex">
                             <div className="font-display font-bold text-white tracking-[0.1em] text-lg leading-none mb-1">
                                 ORIGEN
@@ -95,19 +97,33 @@ const Navbar: React.FC = () => {
                                 SIERRA NEVADA
                             </div>
                         </div>
+                        */}
+                    </div>
+
+
+                    {/* Desktop Menu */}
+                    <div className="hidden lg:flex items-center space-x-8 font-display text-sm tracking-widest text-white">
+                        <Link to="/catalog?filter=coffee" className="hover:text-primary transition-colors">CAFÉ ORIGEN</Link>
+                        <Link to="/catalog?filter=accessories" className="hover:text-primary transition-colors">ACCESORIOS</Link>
+                        <Link to="/catalog?filter=derivatives" className="hover:text-primary transition-colors">DERIVADOS</Link>
                     </div>
 
                     {/* Desktop Actions */}
                     <div className="flex items-center space-x-4 text-white">
                         <button
-                            onClick={() => navigate('/ai-lab')}
-                            className={`hidden lg:flex items-center gap-2 transition-all font-accent text-xs tracking-widest px-4 py-2 rounded-sm border ${isScrolled ? 'border-primary/50 text-white hover:bg-primary hover:border-primary' : 'border-white/30 text-white hover:bg-white/10'
-                                }`}
+                            onClick={() => navigate('/login')}
+                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+                            title="Iniciar Sesión"
                         >
-                            <span className="material-icons-outlined text-sm">science</span>
-                            {t('nav.ai')}
+                            <span className="material-icons-outlined">login</span>
                         </button>
-
+                        <button
+                            onClick={() => navigate('/ai-lab')}
+                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+                            title={t('nav.ai')}
+                        >
+                            <span className="material-icons-outlined">science</span>
+                        </button>
                         <button
                             onClick={() => setIsSearchOpen(true)}
                             className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
@@ -145,11 +161,15 @@ const Navbar: React.FC = () => {
             <div className={`fixed inset-0 z-30 bg-background-light dark:bg-background-dark pt-24 px-6 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'} lg:hidden`}>
                 <div className="flex flex-col gap-6">
                     <Link to="/" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.home')}</Link>
+                    <Link to="/catalog?filter=coffee" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">CAFÉ ORIGEN</Link>
+                    <Link to="/catalog?filter=accessories" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">ACCESORIOS</Link>
+                    <Link to="/catalog?filter=derivatives" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">DERIVADOS</Link>
                     <Link to="/subscription" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.sub')}</Link>
                     <Link to="/guide" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.guide')}</Link>
                     <Link to="/ai-lab" className="text-2xl font-display font-bold text-primary border-b border-primary/30 pb-4 flex items-center justify-between">
                         {t('nav.ai')} <span className="material-icons-outlined">science</span>
                     </Link>
+
                     <button
                         onClick={() => setIsSearchOpen(true)}
                         className="text-left text-lg font-body text-gray-600 dark:text-gray-400 flex items-center gap-2 mt-4"
