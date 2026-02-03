@@ -6,24 +6,59 @@ export const emailService = {
             const { data, error } = await supabase.functions.invoke('send-email', {
                 body: {
                     to: email,
-                    subject: '🌿 Bienvenido al Ritual: Origen Sierra Nevada',
+                    subject: '🌿 Tu Ritual comienza aquí: Bienvenido a Origen Sierra Nevada',
                     html: `
-                        <div style="font-family: sans-serif; color: #1a1a1a; max-width: 600px; margin: auto; border: 1px solid #C5A065; padding: 20px; border-radius: 10px;">
-                            <h2 style="color: #C5A065;">¡Hola, ${fullName}!</h2>
-                            <p>Es un placer darte la bienvenida a nuestra comunidad exclusiva. Has dado el primer paso para reecontrarte con tu Origen.</p>
-                            <p>Tu solicitud de membresía ha sido recibida y está siendo procesada por nuestro equipo de curaduría.</p>
-                            <div style="background: #f9f8f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
-                                <p style="margin: 0; font-weight: bold; color: #C5A065;">Próximos Pasos:</p>
-                                <ul style="margin: 10px 0;">
-                                    <li>Validación de datos de contacto.</li>
-                                    <li>Habilitación de acceso al panel de beneficios.</li>
-                                    <li>Notificación vía email en las próximas 24-48 horas.</li>
-                                </ul>
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <style>
+                                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+                                body { margin: 0; padding: 0; background-color: #050806; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+                                .container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #050806; border: 1px solid #C5A065; border-radius: 24px; overflow: hidden; margin-top: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+                                .hero { position: relative; width: 100%; height: 350px; background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1200'); background-size: cover; background-position: center; border-bottom: 2px solid #C5A065; }
+                                .overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 0%, #050806 100%); }
+                                .content { padding: 48px; text-align: center; }
+                                .logo { width: 120px; margin-bottom: 32px; filter: drop-shadow(0 0 10px rgba(197,160,101,0.5)); }
+                                h1 { color: #FBF5B7; font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 16px; letter-spacing: -0.02em; font-weight: normal; font-style: italic; }
+                                p { color: #ffffffb3; line-height: 1.8; font-size: 15px; margin-bottom: 24px; }
+                                .status-card { background: rgba(197, 160, 101, 0.05); border: 1px solid rgba(197, 160, 101, 0.2); border-radius: 16px; padding: 24px; margin: 32px 0; }
+                                .status-label { color: #C5A065; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 12px; display: block; }
+                                .status-text { color: #ffffff; font-size: 16px; font-weight: 500; }
+                                .footer { padding: 32px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+                                .btn { display: inline-block; background: #C5A065; color: #000; font-weight: bold; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; transition: all 0.3s; }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <div class="hero">
+                                    <div class="overlay"></div>
+                                    <div style="position: absolute; bottom: 40px; width: 100%; text-align: center;">
+                                        <img src="https://origen2025.share.zrok.io/logo-origen-sierra-nevada.svg" class="logo" alt="Logo">
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <h1>Un ritual sagrado ha comenzado...</h1>
+                                    <p>Hola, <strong>${fullName}</strong>. <br><br> Es un honor recibir tu solicitud para formar parte de nuestra comunidad. En Origen Sierra Nevada, no solo vendemos café; cultivamos una conexión mística entre la montaña y tu espíritu.</p>
+                                    
+                                    <div class="status-card">
+                                        <span class="status-label">Estado de la Membresía</span>
+                                        <div class="status-text">Fase de Curaduría y Bienvenida</div>
+                                        <p style="margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.5);">Nuestros sumilleres y fundadores están revisando tu perfil para garantizar la mejor experiencia. Recibirás una señal en un plazo de 24 a 48 horas.</p>
+                                    </div>
+
+                                    <p style="font-style: italic; font-size: 14px; color: #C5A065;">"Todo lo que amas, desde el corazón de la Sierra."</p>
+                                    
+                                    <div style="margin-top: 40px;">
+                                        <a href="https://origen2025.share.zrok.io" class="btn">Explorar el Origen</a>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.2);">© 2026 Origen Sierra Nevada SM • Santa Marta, Colombia</p>
+                                </div>
                             </div>
-                            <p>Mientras tanto, te invitamos a explorar nuestra <a href="https://origen2025.share.zrok.io/guide" style="color: #C5A065;">Guía de Preparación</a> para que estés listo para el ritual.</p>
-                            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-                            <p style="font-size: 12px; color: #888; text-align: center;">© 2026 Origen Sierra Nevada SM. Todo el café que amas, desde el corazón de la montaña.</p>
-                        </div>
+                        </body>
+                        </html>
                     `
                 }
             });
@@ -36,18 +71,85 @@ export const emailService = {
         }
     },
 
+    sendApprovalEmail: async (email: string, fullName: string) => {
+        try {
+            const { data, error } = await supabase.functions.invoke('send-email', {
+                body: {
+                    to: email,
+                    subject: '✨ Acceso Concedido: Bienvenido al Círculo de Origen',
+                    html: `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <style>
+                                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+                                body { margin: 0; padding: 0; background-color: #050806; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+                                .container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #050806; border: 1px solid #C5A065; border-radius: 24px; overflow: hidden; margin-top: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+                                .hero { position: relative; width: 100%; height: 350px; background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1200'); background-size: cover; background-position: center; border-bottom: 2px solid #C5A065; }
+                                .overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 0%, #050806 100%); }
+                                .content { padding: 48px; text-align: center; }
+                                .logo { width: 120px; margin-bottom: 24px; filter: drop-shadow(0 0 10px rgba(197,160,101,0.5)); }
+                                h1 { color: #C5A065; font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 16px; font-weight: normal; }
+                                p { color: #ffffffb3; line-height: 1.8; font-size: 15px; margin-bottom: 24px; }
+                                .btn { display: inline-block; background: #C5A065; color: #000; font-weight: bold; text-decoration: none; padding: 18px 40px; border-radius: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.25em; transition: all 0.3s; }
+                                .footer { padding: 32px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <div class="hero">
+                                    <div class="overlay"></div>
+                                    <div style="position: absolute; top: 100px; width: 100%; text-align: center;">
+                                        <span style="color: #C5A065; font-size: 64px;">✨</span>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <img src="https://origen2025.share.zrok.io/logo-origen-sierra-nevada.svg" class="logo" alt="Logo">
+                                    <h1>Tu registro ha sido aprobado</h1>
+                                    <p>Hola, <strong>${fullName}</strong>. <br><br> La montaña ha hablado. Tu alma ha sido bienvenida al círculo interno de Origen Sierra Nevada.</p>
+                                    <p>Ahora tienes acceso total a nuestro catálogo exclusivo, el Brandbook interactivo y beneficios únicos de nuestra comunidad de amantes del café de especialidad.</p>
+                                    
+                                    <div style="margin: 40px 0;">
+                                        <a href="https://origen2025.share.zrok.io/login" class="btn">Iniciar el Ritual de Compra</a>
+                                    </div>
+
+                                    <p style="font-size: 13px; color: rgba(255,255,255,0.4);">Prepárate para redescubrir lo que significa una verdadera taza de café.</p>
+                                </div>
+                                <div class="footer">
+                                    <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.2);">© 2026 Origen Sierra Nevada SM • Santa Marta, Colombia</p>
+                                </div>
+                            </div>
+                        </body>
+                        </html>
+                    `
+                }
+            });
+
+            if (error) throw error;
+            return { success: true, data };
+        } catch (error) {
+            console.error('Error in sendApprovalEmail:', error);
+            return { success: false, error };
+        }
+    },
+
     sendOrderNotification: async (adminEmail: string, details: any) => {
         try {
             const { data, error } = await supabase.functions.invoke('send-email', {
                 body: {
                     to: adminEmail,
-                    subject: '🔔 Alerta: Nueva Actividad en Origen SNSM',
+                    subject: `🔔 Origen Alert: ${details.type || 'Nueva Actividad'}`,
                     html: `
-                        <div style="font-family: sans-serif; color: #1a1a1a; padding: 20px;">
-                            <h2 style="color: #C5A065;">Notificación de Sistema</h2>
-                            <p>Se ha registrado un nuevo evento que requiere tu atención:</p>
-                            <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px;">${JSON.stringify(details, null, 2)}</pre>
-                            <p><a href="https://origen2025.share.zrok.io/admin" style="color: #C5A065; font-weight: bold;">Ir al Panel de Administración →</a></p>
+                        <div style="font-family: sans-serif; color: #ffffff; background: #050806; padding: 40px; border-radius: 20px; border: 1px solid #C5A065;">
+                            <h2 style="color: #C5A065;">Nueva Alerta de Sistema</h2>
+                            <p style="color: rgba(255,255,255,0.6);">Se ha detectado una nueva acción que requiere su supervisión:</p>
+                            <div style="background: rgba(255,255,255,0.05); padding: 24px; border-radius: 12px; border: 1px solid rgba(197,160,101,0.2);">
+                                <pre style="margin: 0; color: #FBF5B7; font-size: 14px;">${JSON.stringify(details, null, 2)}</pre>
+                            </div>
+                            <div style="margin-top: 32px; text-align: center;">
+                                <a href="https://origen2025.share.zrok.io/admin" style="background: #C5A065; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase;">Abrir Panel de Control</a>
+                            </div>
                         </div>
                     `
                 }

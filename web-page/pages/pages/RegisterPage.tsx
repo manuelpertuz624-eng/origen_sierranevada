@@ -25,17 +25,33 @@ const RegisterPage: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const validatePassword = (pass: string) => {
+        const minLength = pass.length >= 8;
+        const hasUpper = /[A-Z]/.test(pass);
+        const hasLower = /[a-z]/.test(pass);
+        const hasNumber = /[0-9]/.test(pass);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pass);
+
+        return {
+            isValid: minLength && hasUpper && hasLower && hasNumber && hasSpecial,
+            requirements: { minLength, hasUpper, hasLower, hasNumber, hasSpecial }
+        };
+    };
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
-        // Validaciones básicas
+        // Validaciones de seguridad avanzada
+        const passwordCheck = validatePassword(formData.password);
+
         if (formData.password !== formData.confirmPassword) {
             setError('Las contraseñas no coinciden.');
             return;
         }
-        if (formData.password.length < 6) {
-            setError('La contraseña debe tener al menos 6 caracteres.');
+
+        if (!passwordCheck.isValid) {
+            setError('La contraseña no cumple con los estándares de seguridad requeridos.');
             return;
         }
 
@@ -209,6 +225,34 @@ const RegisterPage: React.FC = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Password Strength Checklist */}
+                    {formData.password && (
+                        <div className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-2">
+                            <p className="text-[10px] text-[#C5A065] uppercase tracking-[0.2em] font-bold mb-2">Seguridad del Ritual</p>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                                {[
+                                    { key: 'minLength', label: '8+ Caracteres' },
+                                    { key: 'hasUpper', label: 'Mayúscula' },
+                                    { key: 'hasLower', label: 'Minúscula' },
+                                    { key: 'hasNumber', label: 'Número' },
+                                    { key: 'hasSpecial', label: 'Especial (@#$)' }
+                                ].map((req) => {
+                                    const isDone = validatePassword(formData.password).requirements[req.key as keyof ReturnType<typeof validatePassword>['requirements']];
+                                    return (
+                                        <div key={req.key} className="flex items-center gap-2">
+                                            <span className={`material-icons-outlined text-[12px] transition-colors ${isDone ? 'text-green-500' : 'text-white/20'}`}>
+                                                {isDone ? 'check_circle' : 'circle'}
+                                            </span>
+                                            <span className={`text-[10px] tracking-wide transition-colors ${isDone ? 'text-white/90' : 'text-white/30'}`}>
+                                                {req.label}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Legal Checkbox */}
                     <div className="flex items-start gap-3 mt-4 mb-6">

@@ -58,6 +58,44 @@ Git no permitía ejecutar comandos como `git add` o `git merge`, devolviendo el 
 El servidor de desarrollo o un proceso anterior dejó un archivo de bloqueo huérfano. Se eliminó manualmente el archivo `.git/index.lock` y se forzó el cierre de procesos `git.exe` activos en el Administrador de Tareas.
 
 ---
+### [2026-02-03 11:40] - 🚫 Error: "401 Unauthorized" en Edge Function (Registro)
+**Categoría:** Seguridad / Supabase Auth
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+Al intentar registrar un usuario, la Edge Function `send-email` devolvía un 401. Esto impedía que el primer correo de "Solicitud en Proceso" saliera. El problema era que la función exigía un JWT válido (usuario logueado), pero el registro ocurre *antes* de que el usuario tenga sesión.
+
+**Solución Exitosa:**
+1.  Se desactivó la opción `verify_jwt` en el despliegue de la Edge Function.
+2.  Se implementó una validación interna opcional y se configuraron los encabezados CORS para permitir llamadas desde el cliente de registro.
+
+---
+
+### [2026-02-03 12:45] - 📧 Error: "500 Internal Server Error" (Falta de API Key)
+**Categoría:** Integración / Backend
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+La función de correo fallaba al intertar comunicarse con Resend. Los logs mostraban que la variable de entorno `RESEND_API_KEY` era nula dentro del contenedor de la función.
+
+**Solución Exitosa:**
+1.  Se cargó la API KEY manualmente en la sección **Secrets** de Supabase.
+2.  Se redeplegó la función con un remitente de respaldo (`onboarding@resend.dev`) para evitar bloqueos por dominios no verificados durante la fase de staging.
+
+---
+
+### [2026-02-03 14:50] - 🕵️‍♂️ Error: "Registros Fantasma" e Invisibilidad de Usuarios
+**Categoría:** Lógica de Negocio / Base de Datos
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+El administrador recibía correos de "Nuevo Registro" pero al entrar al panel no veía a nadie. Se detectó que usuarios que ya existían intentaban registrarse de nuevo; Supabase devolvía éxito por seguridad, pero no creaba un nuevo registro. El registro "viejo" estaba oculto por filtros de estado (banned/deleted).
+
+**Solución Exitosa:**
+1.  Se limpió la tabla `auth.users` de correos de prueba antiguos.
+2.  Se rediseñó el `UserManager` con una sección de **"Prioridad: Ritual Pendiente"** que separa visualmente a los usuarios en espera de los activos.
+3.  Se sincronizó el contador del Dashboard con la base de datos real en tiempo real.
+
 ---
 
 ### [2026-02-03 10:55] -  Error: Visibilidad de Credenciales Supabase (Falsa Alerta)

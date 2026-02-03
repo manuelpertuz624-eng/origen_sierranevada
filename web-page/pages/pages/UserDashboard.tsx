@@ -4,7 +4,7 @@ import { authService } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
 
 const UserDashboard: React.FC = () => {
-    const { user } = useAuth();
+    const { user, isAdmin } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'settings'>('overview');
 
@@ -38,7 +38,18 @@ const UserDashboard: React.FC = () => {
                     </div>
 
                     <div className="mt-6 md:mt-0 flex items-center gap-4">
-                        {user?.email !== 'admin@origen.com' && (
+                        {isAdmin ? (
+                            <button
+                                onClick={() => navigate('/admin')}
+                                className="bg-[#C5A065] text-black px-4 py-2 rounded-lg text-center flex items-center gap-2 hover:bg-[#D4B075] transition-all group"
+                            >
+                                <span className="material-icons-outlined text-sm group-hover:rotate-12 transition-transform">security</span>
+                                <div className="text-left leading-tight">
+                                    <p className="text-[9px] uppercase tracking-widest font-bold">Modo</p>
+                                    <p className="font-bold text-xs">Admin</p>
+                                </div>
+                            </button>
+                        ) : (
                             <div className="bg-[#C5A065]/10 border border-[#C5A065] px-4 py-2 rounded-lg text-center">
                                 <p className="text-[10px] text-[#C5A065] uppercase tracking-widest font-bold">Nivel</p>
                                 <p className="font-serif text-xl text-white">Semilla</p>

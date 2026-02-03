@@ -154,11 +154,11 @@ const Navbar: React.FC = () => {
                             <div className="flex items-center gap-3">
                                 <div
                                     className="hidden xl:block text-right cursor-pointer hover:opacity-80 transition-opacity"
-                                    onClick={() => navigate('/account')}
-                                    title="Ir a mi cuenta"
+                                    onClick={() => navigate(isAdmin ? '/admin' : '/account')}
+                                    title={isAdmin ? "Ir al Panel Admin" : "Ir a mi cuenta"}
                                 >
-                                    <p className="text-[10px] text-[#C5A065] uppercase tracking-widest font-bold">HOLA</p>
-                                    <p className="text-xs text-white max-w-[100px] truncate">{user.email?.split('@')[0]}</p>
+                                    <p className="text-[10px] text-[#C5A065] uppercase tracking-widest font-bold">{isAdmin ? 'MODO' : 'HOLA'}</p>
+                                    <p className="text-xs text-white max-w-[100px] truncate">{isAdmin ? 'ADMIN' : user.email?.split('@')[0]}</p>
                                 </div>
                                 <button
                                     onClick={async () => {
@@ -259,6 +259,14 @@ const Navbar: React.FC = () => {
                     <Link to="/catalog?filter=coffee" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">CAFÉ ORIGEN</Link>
                     <Link to="/catalog?filter=accessories" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">ACCESORIOS</Link>
                     <Link to="/catalog?filter=derivates" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">DERIVADOS</Link>
+
+                    {isAdmin && (
+                        <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-display font-bold text-[#C5A065] border-b border-[#C5A065]/20 pb-3 flex items-center justify-between">
+                            PANEL ADMINISTRATIVO
+                            <span className="material-icons-outlined">security</span>
+                        </Link>
+                    )}
+
                     <Link to="/guide" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">{t('nav.guide')}</Link>
 
 

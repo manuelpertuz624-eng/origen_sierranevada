@@ -1,2 +1,9 @@
+** mantener limpio el proyecto **
 Revisar archivos versionado o creados para pruebas que ya cumplieron su ciclo de vida y que no sean necearios 
 para el proyecto, eliminar, si es necesario crear una carpeta "temp" donde ese mantenga éste tipo de archivos.
+
+** respuesta de correo **
+Diseña un correo digno de la página que estamos creando, que los correos que se envíen sean epicos como 
+el proyecto, no un texto blanco plano simple, que sea una bienvenida agradable y epica, una gran tarjeta única!
+
+**  ** 

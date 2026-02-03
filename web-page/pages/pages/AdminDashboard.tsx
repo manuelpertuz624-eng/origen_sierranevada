@@ -6,11 +6,23 @@ import { useNavigate } from 'react-router-dom';
 const AdminDashboard: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [pendingCount, setPendingCount] = React.useState(0);
 
     const handleLogout = async () => {
         await authService.signOut();
         navigate('/login');
     };
+
+    React.useEffect(() => {
+        const checkPending = async () => {
+            const { data } = await authService.getAllProfiles();
+            if (data) {
+                const count = (data as any[]).filter(p => p.status === 'pending').length;
+                setPendingCount(count);
+            }
+        };
+        checkPending();
+    }, []);
 
     return (
         <div className="min-h-screen bg-[#0B120D] text-white font-sans selection:bg-[#C5A065] selection:text-black">
@@ -54,10 +66,32 @@ const AdminDashboard: React.FC = () => {
 
             {/* Contenido Principal */}
             <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-                <h1 className="text-4xl font-serif text-[#C5A065] mb-2">Bienvenido, Manuel</h1>
-                <p className="text-gray-400 mb-12 max-w-2xl font-light">
-                    Desde aquí puedes gestionar el inventario, subir nuevos productos y administrar la presentación de la marca.
-                </p>
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <h1 className="text-4xl font-serif text-[#C5A065] mb-2 uppercase tracking-tight">
+                            Bienvenido, {user?.user_metadata?.full_name?.split(' ')[0] || 'Administrador'}
+                        </h1>
+                        <p className="text-gray-400 max-w-2xl font-light">
+                            Desde aquí puedes gestionar el inventario, autorizar nuevos miembros y custodiar la identidad de la marca.
+                        </p>
+                    </div>
+
+                    {/* Alerta de Acción Inmediata (Solo si hay pendientes) */}
+                    {pendingCount > 0 && (
+                        <div
+                            onClick={() => navigate('/admin/users')}
+                            className="bg-[#C5A065]/10 border border-[#C5A065]/30 p-4 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-[#C5A065]/20 transition-all animate-pulse"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-[#C5A065] flex items-center justify-center text-black">
+                                <span className="material-icons-outlined">person_add</span>
+                            </div>
+                            <div>
+                                <p className="text-[#C5A065] text-[10px] font-bold uppercase tracking-widest">Ritual Pendiente</p>
+                                <p className="text-white text-sm font-medium">Hay {pendingCount} {pendingCount === 1 ? 'solicitud' : 'solicitudes'} esperando curaduría</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
 
                 {/* Grid de Accesos Directos */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

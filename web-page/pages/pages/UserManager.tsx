@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { emailService } from '../services/emailService';
 
 import { UserRole, SecurityFlag, UserStatus } from '../types';
 
@@ -87,10 +88,17 @@ const UserManager: React.FC = () => {
     };
 
     const handleActivateUser = async (userId: string) => {
+        const userProfile = profiles.find(p => p.id === userId);
+
         const { error } = await authService.activateUser(userId);
         if (error) {
             setError("Error al reactivar usuario: " + error.message);
         } else {
+            // If user was pending, send the EPIC approval email
+            if (userProfile && userProfile.status === 'pending') {
+                emailService.sendApprovalEmail(userProfile.email, userProfile.full_name)
+                    .catch(e => console.error("Error sending approval email:", e));
+            }
             fetchUsers();
         }
     };
@@ -160,23 +168,64 @@ const UserManager: React.FC = () => {
                 <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden backdrop-blur-sm">
                     {loading ? (
                         <div className="p-12 text-center text-white/40">Cargando directorio...</div>
-                    ) : filteredProfiles.length === 0 ? (
+                    ) : (filteredProfiles.length === 0) ? (
                         <div className="p-12 text-center text-white/40">
                             {showHidden ? 'No hay registros en la base de datos.' : 'No hay usuarios activos. Revisa los archivos.'}
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
+                            {/* Pendientes Table Section (Conditional) */}
+                            {filteredProfiles.some(p => p.status === 'pending') && (
+                                <div className="border-b-4 border-[#C5A065]/20">
+                                    <div className="bg-[#C5A065]/5 p-4 flex items-center gap-3">
+                                        <span className="material-icons-outlined text-[#C5A065]">pending_actions</span>
+                                        <h3 className="text-[#C5A065] text-xs font-bold uppercase tracking-[0.2em]">Prioridad: Solicitudes de Curaduría</h3>
+                                    </div>
+                                    <table className="w-full text-left border-collapse">
+                                        <tbody className="bg-[#C5A065]/5 divide-y divide-[#C5A065]/10">
+                                            {filteredProfiles.filter(p => p.status === 'pending').map((profile) => (
+                                                <tr key={profile.id} className="hover:bg-[#C5A065]/10 transition-colors">
+                                                    <td className="p-6">
+                                                        <div className="font-bold text-white mb-1">{profile.full_name || 'Nuevo Miembro'}</div>
+                                                        <div className="text-[#C5A065] text-xs">{profile.email}</div>
+                                                    </td>
+                                                    <td className="p-6">
+                                                        <span className="px-3 py-1 rounded-full bg-[#C5A065] text-black text-[10px] font-bold tracking-wider uppercase">
+                                                            ⏳ ESPERANDO RITUAL
+                                                        </span>
+                                                    </td>
+                                                    <td className="p-6 text-white/40 text-xs">
+                                                        Solicitado: {new Date(profile.created_at).toLocaleDateString()}
+                                                    </td>
+                                                    <td className="p-6 text-right">
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); handleActivateUser(profile.id); }}
+                                                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all bg-[#C5A065] text-black hover:bg-[#D4B075] shadow-lg shadow-[#C5A065]/20 animate-bounce-slow"
+                                                        >
+                                                            <span className="material-icons-outlined text-sm">how_to_reg</span>
+                                                            Conceder Acceso
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <div className="h-4 bg-black/40"></div>
+                                </div>
+                            )}
+
+                            {/* Main Directory Table */}
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-white/10 bg-black/20 text-xs uppercase tracking-widest text-[#C5A065]">
-                                        <th className="p-6 font-bold">Usuario</th>
-                                        <th className="p-6 font-bold">Rol Actual</th>
-                                        <th className="p-6 font-bold">Fecha Reg.</th>
+                                        <th className="p-6 font-bold">Directorio General</th>
+                                        <th className="p-6 font-bold">Rol</th>
+                                        <th className="p-6 font-bold">Ingreso</th>
                                         <th className="p-6 font-bold text-right">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm divide-y divide-white/5">
-                                    {filteredProfiles.map((profile) => (
+                                    {filteredProfiles.filter(p => p.status !== 'pending').map((profile) => (
                                         <tr key={profile.id} className={`hover:bg-white/5 transition-colors ${profile.status === 'deleted' || profile.status === 'banned' ? 'opacity-50 grayscale-[0.5]' : ''}`}>
                                             <td className="p-6">
                                                 <div className="flex items-center gap-3">
