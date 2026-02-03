@@ -1,0 +1,2 @@
+Revisar archivos versionado o creados para pruebas que ya cumplieron su ciclo de vida y que no sean necearios 
+para el proyecto, eliminar, si es necesario crear una carpeta "temp" donde ese mantenga éste tipo de archivos.
