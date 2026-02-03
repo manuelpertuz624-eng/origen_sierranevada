@@ -72,7 +72,7 @@ const translations: Record<string, Record<Language, string>> = {
     'sub.modal_desc': { es: 'Tu suscripción para Sierra Nevada Signature Blend ha sido activada.', en: 'Your subscription for Sierra Nevada Signature Blend has been activated.' },
     'sub.modal_return': { es: 'Volver al Inicio', en: 'Return Home' },
     'sub.next_ship': { es: 'Próximo Envío', en: 'Next Shipment' },
-    
+
     // Frequencies
     'sub.freq.weekly': { es: 'Semanal', en: 'Weekly' },
     'sub.freq.biweekly': { es: 'Quincenal', en: 'Every 2 Weeks' },
@@ -88,7 +88,7 @@ const translations: Record<string, Record<Language, string>> = {
     'brew.interactive': { es: 'Guía Interactiva', en: 'Interactive Guide' },
     'brew.time': { es: 'Tiempo', en: 'Time' },
     'brew.texture': { es: 'Textura', en: 'Texture' },
-    
+
     // AI Lab
     'ai.title': { es: 'El Laboratorio de Innovación', en: 'The Innovation Lab' },
     'ai.desc': { es: 'Experimenta el futuro del café con nuestras herramientas de Barista IA. Genera arte, analiza granos, crea videos o chatea con nuestro sistema experto.', en: 'Experience the future of coffee with our AI-powered Barista tools. Generate art, analyze beans, create videos, or chat with our expert system.' },
@@ -123,7 +123,7 @@ const translations: Record<string, Record<Language, string>> = {
     'footer.enter_email': { es: 'Ingresa tu correo', en: 'Enter your email address' },
     'footer.sub_btn': { es: 'Suscribirse', en: 'Subscribe' },
     'footer.sub_success': { es: '¡Suscrito!', en: 'Subscribed!' },
-    
+
     // Common
     'common.loading': { es: 'Cargando...', en: 'Loading...' },
     'common.error': { es: 'Error', en: 'Error' }
@@ -147,12 +147,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         return translations[key]?.[language] || defaultText || key;
     };
 
-    const formatPrice = (priceUSD: number) => {
+    const formatPrice = (priceBaseCOP: number) => {
         if (currency === 'USD') {
+            const priceUSD = priceBaseCOP / 4000;
             return `$${priceUSD.toFixed(2)}`;
         } else {
-            const priceCOP = priceUSD * 4000;
-            return `$${priceCOP.toLocaleString('es-CO')}`;
+            return `$${priceBaseCOP.toLocaleString('es-CO')}`;
         }
     };
 

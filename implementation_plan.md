@@ -1,245 +1,214 @@
 # Integración Supabase - Origen Sierra Nevada
 
-Implementación completa de autenticación con Supabase y protección del brandbook para acceso exclusivo de administradores.
+Implementación completa de autenticación con Supabase, Panel Administrativo y Experiencia de Usuario Premium.
+
+## Status Update: February 02, 2026 (Night)
+**Reporte de Avances - Seguridad, Emails & Gestión Dinámica**
+
+### 1. Sistema Administrativo (`/admin`) ✅
+*   **Dashboard Implementado**: Diseñado `AdminDashboard.tsx` con accesos rápidos a Productos y Brandbook.
+*   **Gestor de Productos**: Creado `ProductManager.tsx` para la futura carga de inventario (CRUD).
+*   **Autenticación Robusta**:
+    *   **Login Refinado**: `LoginPage.tsx` rediseñado para ser acogedor ("Bienvenido al Ritual"), no intimidante.
+    *   **Registro Completo**: `RegisterPage.tsx` creado capturando Nombre, Teléfono y Email.
+    *   **Roles**: Lógica de verificación de roles (`checkIsAdmin`) lista para diferenciar clientes de admins.
+
+### 2. Cumplimiento Legal (Habeas Data) ✅
+*   **Consentimiento en Registro**: Checkbox obligatorio para Términos y Política de Privacidad.
+*   **Cookie Banner**: Componente `CookieBanner.tsx` implementado:
+    *   Diseño no intrusivo (Glassmorphism).
+    *   Opción Aceptar/Configurar.
+    *   Persistencia en `localStorage`.
+
+### 3. Experiencia Visual (Hero & Branding) ✅
+*   **Pop-Out Ring System V2**: Perfeccionado el efecto 3D del anillo en el Home. Se ajustaron las máscaras (`clip-path`) para que las capas se fundan invisiblemente.
+*   **Identidad de Marca**:
+    *   Actualizado el Footer con logos oficiales en lugar de texto.
+    *   Fechas corregidas: **EST. 2025** (Fundación) y **© 2026** (Año actual).
+
+### 4. Infraestructura ✅
+*   **Zrok Tunneling**: Túnel estable (`https://jyus1vkso3x9.share.zrok.io`) permitiendo auditoría externa en tiempo real.
+
+---
+
+## 🗺️ DAY TASK: Ruta de Trabajo del Día (02 Feb)
+
+Esta es la ruta trazada para la sesión de hoy. Nos enfocaremos en cerrar el ciclo funcional del usuario.
+
+### Completado (Done) ✅
+1.  **Auditoría Externa**: Levantar túnel Zrok para compartir progreso.
+2.  **Correcciones Visuales**:
+    *   [x] Home: Arreglar solapamiento del anillo (Pop-out seam).
+    *   [x] Login: Cambiar textos restrictivos por bienvenida elegante.
+    *   [x] Footer: Actualizar años y logos.
+3.  **Módulo Legal & Ético**:
+    *   [x] Crear Banner de Cookies (Glassmorphism).
+    *   [x] Agregar Checkbox legal en Registro.
+    *   [x] **Sistema de Blindaje Anti-Fraude**: Reporte categorizado de usuarios sospechosos.
+4.  **Sistema de Usuarios & Control de Acceso**:
+    *   [x] Crear página de Registro (`/register`) con campos extra.
+    *   [x] **Curaduría de Membresía**: Proceso de validación proactiva presentado como control de calidad y exclusividad.
+    *   [x] **Directorio Dinámico (Soft Delete)**: Sistema de archivos para usuarios borrados/bloqueados sin pérdida de datos forenses.
+    *   [x] **Alertas de Antecedentes**: Badge visual para detectar reincidentes.
+5.  **Comunicaciones Transaccionales (Refinadas)**:
+    *   [x] **Integración Resend API**: Sistema profesional de envío de correos.
+    *   [x] **Experiencia de Origen Email**: Correo de bienvenida con tono sutil y acogedor.
+    *   [x] **Admin Alerts**: Notificaciones de actividad para gestión de curaduría.
+
+### Pendiente / En Curso (To-Do) 🚧
+1.  **Conexión Base de Datos**: Migrar de Mock DB a Supabase real para la tabla `products`.
+2.  **Infraestructura de Email**: Implementar Edge Functions para envío de correos seguro (reemplazar MOCK actual).
+3.  **Seguridad**: Pruebas de estrés en el flujo de aprobación/bloqueo.
+4.  **UI Admin**: Pulido final del gestor de productos (filtros y búsqueda).
+
+### Logros de Hoy (Resumen de Cierre) ✅
+*   [x] **Refinamiento de Marca**: Evolución del tono de "Seguridad" a "Curaduría Exclusiva". ✨
+*   [x] **Arquitectura de Datos**: Restauración total del sistema de tipos (Suscripción, Guías, IA Lab).
+*   [x] **Soporte Multilingüe**: Implementación de lógica dinámica para Catálogo y Home (ES/EN).
+*   [x] **Blindaje de Build**: Solución de conflictos de dependencias Node.js en el cliente.
+*   [x] **Comunicaciones**: Configuración base de Resend (Modo Mock para estabilidad).
+
+---
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Credenciales de Supabase Incompletas**: Necesito que me proporciones la URL completa de tu proyecto Supabase. El archivo [.env](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/web-page/pages/.env) tiene:
-> ```
-> NEXT_PUBLIC_SUPABASE_URL=https://
-> NEXT_PUBLIC_SUPABASE_ANON_KEY=sbp_d45e7014cc21ba012737927a042f5de08b997001
-> ```
-> La URL está incompleta. Debería verse algo como:
-> ```
-> NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
-> ```
-
-> [!NOTE]
-> **Opciones de Implementación**:
-> 1. Si ya tienes un proyecto Supabase, proporciona la URL
-> 2. Si no tienes proyecto, te guío para crearlo en supabase.com
-> 3. Puedo proceder con configuración genérica que ajustarás después
+> **Próximo Paso Crítico**: Necesitamos confirmar que tienes acceso al Dashboard Administrativo con tu usuario (`manuel78pertuz@gmail.com`). Una vez dentro, validaremos que la tabla de productos se pueda crear desde el panel o script SQL.
 
 ---
 
-## Proposed Changes
+## Proposed Changes (Next Steps)
 
-### Configuración y Dependencias
+### Base de Datos Supabase (Pendiente)
 
-#### [MODIFY] [.env](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/.env)
-Completar las credenciales de Supabase con la URL correcta del proyecto.
-
-#### [MODIFY] [package.json](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/package.json)
-Añadir dependencias de Supabase:
-```json
-{
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
-  }
-}
-```
-
----
-
-### Servicios y Configuración
-
-#### [NEW] [supabaseClient.ts](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/services/supabaseClient.ts)
-Cliente de Supabase configurado con variables de entorno.
-
-#### [NEW] [authService.ts](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/services/authService.ts)
-Servicio de autenticación con funciones para:
-- Login con email/password
-- Logout
-- Obtener sesión actual
-- Verificar rol de usuario
-
----
-
-### Tipos TypeScript
-
-#### [MODIFY] [types.ts](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/types.ts)
-Añadir interfaces para:
-- `User`: Usuario de Supabase
-- `UserRole`: Roles (admin, user)
-- `AuthState`: Estado de autenticación
-- [Profile](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/web-page/pages/types.ts#16-22): Perfil de usuario con rol
-
----
-
-### Contextos y Estado
-
-#### [NEW] [AuthContext.tsx](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/contexts/AuthContext.tsx)
-Context Provider para:
-- Estado de autenticación global
-- Usuario actual
-- Funciones de login/logout
-- Loading states
-
----
-
-### Componentes de Autenticación
-
-#### [NEW] [Login.tsx](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/pages/Login.tsx)
-Página de login con:
-- Formulario de email/password
-- Validación de campos
-- Manejo de errores
-- Diseño consistente con brandbook (colores dorados/verde)
-
-#### [NEW] [ProtectedRoute.tsx](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/components/ProtectedRoute.tsx)
-Componente HOC para proteger rutas:
-- Verifica autenticación
-- Verifica rol (opcional)
-- Redirige a login si no autorizado
-
----
-
-### Brandbook React
-
-#### [NEW] [Brandbook.tsx](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/pages/Brandbook.tsx)
-Migración del [brandbook.html](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/Documentation/Brandbook%20Origen%20SNSM/brandbook.html) a componente React:
-- Mantener todo el diseño y funcionalidad
-- Usar Tailwind como ya está configurado
-- Integrar con sistema de autenticación  
-- Botón de logout en header
-
----
-
-### Base de Datos Supabase
-
-#### Esquema SQL
-
+#### Esquema SQL `products`
 ```sql
--- Tabla de perfiles de usuario
-create table public.profiles (
-  id uuid references auth.users on delete cascade primary key,
-  email text unique not null,
-  full_name text,
-  role text not null default 'user' check (role in ('user', 'admin')),
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+create table public.products (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  description text,
+  price numeric not null,
+  region text default 'Sierra Nevada',
+  roast_level text check (roast_level in ('light', 'medium', 'dark')),
+  image_url text, -- URL de Storage
+  stock_quantity integer default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Row Level Security
-alter table public.profiles enable row level security;
-
--- Políticas de acceso
-create policy "Usuarios pueden ver su propio perfil"
-  on public.profiles for select
-  using (auth.uid() = id);
-
-create policy "Usuarios pueden actualizar su propio perfil"
-  on public.profiles for update
-  using (auth.uid() = id);
-
--- Función para crear perfil automáticamente al registrarse
-create or replace function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, email, full_name, role)
-  values (new.id, new.email, new.raw_user_meta_data->>'full_name', 'user');
-  return new;
-end;
-$$ language plpgsql security definer;
-
--- Trigger para ejecutar la función
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute function public.handle_new_user();
+-- RLS: Solo admins pueden escribir, todos pueden leer
+alter table public.products enable row level security;
+create policy "Public read products" on public.products for select using (true);
+create policy "Admin insert products" on public.products for insert with check (public.check_if_admin() = true);
+create policy "Admin update products" on public.products for update using (public.check_if_admin() = true);
 ```
-
----
-
-### Routing y Navegación
-
-#### [MODIFY] [App.tsx](file:///G:/Mi%20unidad/Diseño%20Web/origen_sierranevada/web-page/pages/App.tsx)
-Actualizar rutas con:
-- Ruta pública `/login`
-- Ruta protegida `/brandbook` (solo admin)
-- AuthProvider envolviendo toda la app
-- Redirecciones basadas en autenticación
-
----
-
-## Verification Plan
-
-### Automated Tests
-No aplicable en esta fase inicial.
-
-### Manual Verification
-
-1. **Configuración de Supabase**:
-   - Crear proyecto en Supabase Dashboard
-   - Copiar credenciales al archivo [.env](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/web-page/pages/.env)
-   - Ejecutar script SQL para crear tablas
-   - Crear usuario admin de prueba
-
-2. **Testing de Autenticación**:
-   - Instalar dependencias: `npm install`
-   - Iniciar servidor: `npm run dev`
-   - Acceder a `/login`
-   - Intentar acceder a `/brandbook` sin login → debe redirigir
-   - Hacer login con usuario normal → brandbook debe denegar acceso
-   - Hacer login con usuario admin → brandbook debe permitir acceso
-
-3. **Funcionalidad del Brandbook**:
-   - Verificar que todas las funcionalidades originales funcionan
-   - Probar copiado de colores
-   - Verificar animaciones y navegación
-   - Probar menú móvil
-   - Verificar botón de logout
-
-4. **Seguridad**:
-   - Intentar acceder directamente a `/brandbook` sin token
-   - Verificar que tokens expiran correctamente
-   - Probar logout y re-login
-
----
-
-## Notas de Implementación
-
-> [!TIP]
-> **Migración Gradual**: El brandbook HTML actual seguirá funcionando. La versión React será adicional y podrá coexistir durante el desarrollo.
-
-> [!WARNING]
-> **Seguridad de Credenciales**: Asegúrate de añadir [.env](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/web-page/pages/.env) al [.gitignore](file:///G:/Mi%20unidad/Dise%C3%B1o%20Web/origen_sierranevada/web-page/pages/.gitignore) para no subir credenciales al repositorio.
-
-
-**INSTRUCCIONES PARA EL HERO**
-"Café Malu" es un producto y "Origen Sierra Nevada" es una tienda, creada a groso modo de ofrecer diferentes variedades de productos entre tipos de café, accesorios como molinos de cafe ya sean; manuales, electricos, diferentes tipos de accesorios para preparar el café, coladores y demás y también, productos derivados del café como dulces, jaleas, bebidas embotelladas o enlatadas, y en la parte de laboratorio invitar a las personas para que pregunten por cualquier tema relacionado al café incluso recetas para preparaciones exclusivas y exoticas a base de café!
-por lo tanto; en el Hero o portada va a aparecer a la izquierda, una imagen del producto dentro de un aro de oro brillante metalico, y a la derecha una lista con su respectivo título del producto una breve descripción del producto, si tiene presentación en grano entero y molido, el peso en gramo como lo mas regular 125gr, 250gr, 350gr, 400gr, 500gr y 1000gr.
-y los precios que mostrará dos etiquetas de precio: una para precio estándar (`text-platinum`) y otra para MEMBER PRICE (`text-[#C5A065]`) con un 10% de descuento visualmente destacado.
-botones de control tipo "pastilla" (`selector-pill`) para selección de Molienda y Peso.
-un botón que diga "Añadir al Carrito" y otro que diga "Detalles".
-Coloca botones de desplazamiento para que el usuario pueda ver los productos disponibles.
 
 ### Standardized Hero Presentation ("Pop-Out Ring System")
 
-> [!IMPORTANT]
-> **This is the mandatory visual standard for all future coffee product presentations on the website.**
+> [!NOTE]
+> **Guidelines for Administrators:**
+> The "Pop-Out" effect relies on a perfect PNG cutout. When uploading new products via the `ProductManager`, ensure images are:
+> 1.  Centered.
+> 2.  Transparent background.
+> 3.  Tall enough to break the top circle boundary.
 
-**Visual Concept:**
-A high-luxury "gyroscope" presentation where the product appears to float within a metallic gold ring. The key effect is a "3D Pop-Out" where the top of the product breaks the boundary of the ring, creating depth and realism.
 
-**Technical Implementation (CSS Layers):**
-The effect relies on a 3-layer CSS z-index stack:
-1.  **Layer 1 (Base):** The full product image, masked inside the circle (`overflow: hidden`). This creates the foundational "inside the portal" look.
-2.  **Layer 2 (The Frame):** The `.gold-ring-metallic` div, absolute positioned over Layer 1. Border: `3px solid rgba(197, 160, 101, 0.8)`.
-3.  **Layer 3 (The Pop-Out):** A duplicate of the product image, placed *above* the ring (z-index: 30), but heavily clipped (`clip-path: inset(0 0 60% 0)`). This reveals *only* the top portion (flowers, bag tops) that "breaks" the frame.
+---
 
-**Administrator Guidelines (For Image Selection):**
-When selecting or photographing new coffee products for this section, the following strict rules apply:
+## 📜 Bitácora de Proyecto (Project Log)
 
-*   **Format:** High-resolution PNG with a purely transparent background.
-*   **Composition:**
-    *   **Base:** Must present a solid base (e.g., stone, wood, coffee beans) that fits nicely within the bottom curve of a circle.
-    *   **Height:** The subject (bags/cups) must be tall enough so that the top 35-40% extends *above* the visual center.
-    *   **Top Details:** Ideal subjects have elements at the top (leaves, steam, package headers) that look good when overlapping the gold ring.
-*   **Centering:** The product must be perfectly centered horizontally in the PNG.
-*   **Lighting:** Cinematic, high-contrast lighting that matches the website's dark theme (avoid flat, bright white studio lighting).
+### [2026-02-02 14:55] - Definición de Gestión de Usuarios
+**Acción:** Requerimiento de funcionalidad administrativa crítica.
+**Detalle:** 
+El administrador requiere control total sobre la base de usuarios. Se establece que:
+1.  Todo registro nuevo es rol `user` por defecto.
+2.  El administrador puede ascender usuarios a `admin` (dueño/colaborador) o eliminarlos.
+3.  Implementación de módulo CRUD de usuarios.
 
-**Future Admin Panel Requirements:**
-When building the Admin Panel for product uploads:
-1.  Include a "Preview" tool that overlays the Gold Ring on the uploaded image so the admin can adjust positioning before saving.
-2.  Ensure the file upload accepts large PNGs (up to 5MB) to maintain the crispness of the details.
+**Plan de Ejecución:**
+1.  Actualizar `authService` para permitir listar todos los perfiles (requiere permisos de admin en RLS).
+2.  Crear componente `UserManager.tsx` para visualizar tabla de usuarios.
+3.  Agregar controles de "Ascender a Admin" y "Eliminar Usuario".
+4.  Integrar acceso en `AdminDashboard.tsx`.
+
+**Estado:** ✅ Completado
+
+### [2026-02-02 15:15] - Definición de Experiencia de Cliente (User Dashboard)
+**Acción:** Creación del "Customer Area".
+**Detalle:** 
+Un usuario registrado necesita percibir valor inmediato. Se define el Panel de Cliente con:
+1.  **Identidad:** Gestión de perfil y preferencias de consumo.
+2.  **Transaccional:** Historial de pedidos y facturas.
+3.  **Fidelización:** Visualización de beneficios (descuentos, nivel).
+4.  **Navegación:** Acceso directo desde el Navbar logueado (`/account`).
+
+**Estado:** ✅ Completado
+
+### [2026-02-02 15:30] - Implementación de Catálogo y Precios Dinámicos
+**Acción:** Creación de `CatalogPage` e integración de beneficios.
+**Detalle:**
+1.  **Catálogo Visual:** Grid de productos con filtrado (Café, Accesorios, etc.).
+2.  **Lógica de Precios:** Detección de sesión de usuario para aplicar 10% OFF automático.
+    *   *Guest:* Precio Full.
+    *   *User:* Precio Promo + Precio Full tachado.
+3.  **UX:** Etiquetas de "Precio Socio" para reforzar el valor de la membresía.
+
+**Estado:** ✅ Completado
+
+### [2026-02-02 15:40] - Cierre de Sesión: Ecosistema de Usuario
+**Resumen:** Se ha completado el ciclo de vida del usuario registrado.
+1.  **Registro y Login:** Funcionales con validación y UX mejorada.
+2.  **Panel de Cliente:** Espacio VIP con acceso a beneficios legales y de compra.
+3.  **Economía Dinámica:** El sistema ahora reconoce al usuario y aplica descuentos automáticamente en todo el sitio (`/catalog` y Home).
+4.  **Gestión Administrativa:** El superusuario puede ver y gestionar el staff desde `/admin/users`.
+
+**Próximos Pasos (Mañana):**
+### [2026-02-02 17:30] - Sistema de Compras y Refinamiento Visual
+**Acción:** Implementación completa del flujo de carrito y pulido estético.
+**Detalle:**
+1.  **Cart System (Carrito):**
+    *   Implementado `CartContext.tsx` con persistencia local.
+    *   Drawer lateral funcional en `Navbar.tsx`.
+    *   Limpieza de datos "fantasmas" (mock data eliminada).
+2.  **UX Móvil:**
+    *   Análisis y optimización de vistas en dispositivos móviles.
+    *   Ajuste de solapamiento de imágenes en Hero Section.
+3.  **Identidad Visual:**
+    *   Cambio de terminología técnica ambigua ("Terroir" -> "Tipo de Suelo").
+    *   Generación e integración de activos visuales personalizados (Imagen Modal con cascada Minca).
+    *   Corrección de consistencia de marca (eliminación de imágenes de stock genéricas).
+
+**Estado:** ✅ Completado
+
+**Estado:** ✅ Completado
+
+### [2026-02-02 21:00] - Blindaje de Seguridad y Control de Acceso V2
+**Acción:** Implementación de protocolos de seguridad y auditoría en el Directorio.
+**Detalle:**
+1.  **Reporte de Cumplimiento:**
+    *   Categorización de infracciones: Fraude, Estafa, Extorsión, Uso Indebido.
+    *   Motivos administrativos: Usuario de Prueba, Inactividad (+1 año).
+2.  **Workflow de Autorización:**
+    *   Nueva política: "Pending by Default". Los registros no acceden hasta que un Admin los aprueba manualmente.
+    *   Interfaz de Aprobación rápida integrada en la tabla de usuarios.
+3.  **Sistema de Archivo (Soft Delete):**
+    *   Icono de eliminación que oculta usuarios del panel principal pero mantiene registros permanentes para cumplimiento legal.
+    *   Filtro "Ver Archivos" para auditorías de historial.
+4.  **Inteligencia Preventiva:**
+    *   Badge de **ALERTA** para identificar instantáneamente a usuarios con antecedentes de seguridad durante el scroll del directorio.
+
+**Próximos Pasos (Inmediato):**
+1.  Conectar Base de Datos Real (Susituir Mock Data de Productos).
+2.  Pasarela de Pagos (PoliPay / Integra).
+3.  Pruebas de estrés de seguridad en el flujo de aprobación.
+
+**Historial Reciente:**
+### [2026-02-02 21:40] - Cierre de Sesión: Estabilidad y Alineación de Marca
+**Acción:** Restauración técnica y pulido de experiencia de usuario.
+**Detalle:**
+1.  **Rescate de Build:** Se neutralizaron dependencias de Node.js incompatibles con el navegador (Resend SDK), manteniendo la lógica lista para Edge Functions.
+2.  **Unificación de Tipos:** Se reconstruyó el núcleo de interfaces para asegurar que todas las secciones (Suscripción, Guías, Lab) funcionen sincronizadas.
+3.  **Localización:** El catálogo ahora es 100% dinámico, alternando entre ES y EN de forma fluida.
+4.  **Ritual de Bienvenida:** El flujo de registro ahora es cálido y aspiracional, alineado con el lujo de Café Malu.
+
+**Status Final:** Operativo y listo para migración de datos.
+

@@ -1,18 +1,69 @@
-export interface Message {
+
+import { User } from '@supabase/supabase-js';
+
+export type UserRole = 'admin' | 'user' | 'colaborador';
+export type UserStatus = 'active' | 'banned' | 'suspended' | 'pending' | 'deleted';
+export type SecurityFlag = 'fraude' | 'estafa' | 'extorsion' | 'uso_indebido' | 'prueba' | 'inactividad' | 'eliminacion' | 'n/a';
+export type LanguageCode = 'es' | 'en';
+
+export interface Profile {
     id: string;
-    role: 'user' | 'model';
-    content: string;
-    timestamp: Date;
+    email: string;
+    full_name?: string;
+    role: UserRole;
+    status: UserStatus;
+    security_flag?: SecurityFlag;
+    security_notes?: string;
+    phone?: string;
+    created_at: string;
+    updated_at?: string;
 }
 
-export interface CoffeeMethod {
-    title: string;
-    time: string;
-    texture: string;
-    img: string;
-    desc: string;
+export interface AuthState {
+    user: User | null;
+    profile: Profile | null;
+    loading: boolean;
+    isAdmin: boolean;
 }
 
+export type Multilingual = Record<LanguageCode, string>;
+export type MultilingualTags = Record<LanguageCode, string[]>;
+
+export interface Product {
+    id: string;
+    category: 'coffee' | 'accessories' | 'derivatives';
+    name: Multilingual;
+    price: number;
+    image_url: string;
+    stock: number;
+    description: Multilingual;
+    story: Multilingual;
+    tags: MultilingualTags;
+    badge?: Multilingual;
+    score?: number;
+    color: string;
+    mask_type: 'pop' | 'static';
+    overlay_url?: string;
+    created_at?: string;
+}
+
+export interface ProductInput {
+    category: 'coffee' | 'accessories' | 'derivatives';
+    name: Multilingual;
+    price: number;
+    image_url: string;
+    stock: number;
+    description: Multilingual;
+    story: Multilingual;
+    tags: MultilingualTags;
+    badge?: Multilingual;
+    score?: number;
+    color: string;
+    mask_type: 'pop' | 'static';
+    overlay_url?: string;
+}
+
+// Subscription related types
 export interface FlavorProfile {
     id: string;
     title: string;
@@ -27,51 +78,32 @@ export interface CoffeeFormat {
     img: string;
 }
 
-// AI Service Types
-export interface ChatState {
-    messages: Message[];
-    isLoading: boolean;
+// Brewing Guide types
+export interface CoffeeMethod {
+    title: string;
+    time: string;
+    texture: string;
+    img: string;
+    desc: string;
+}
+
+// AI Lab types
+export interface Message {
+    id: string;
+    role: 'user' | 'model';
+    content: string;
+    timestamp: Date;
 }
 
 export interface GenerationState {
-    result: string | null; // URL or Base64
     isLoading: boolean;
+    resultUri: string | null;
     error: string | null;
 }
 
 export interface VideoGenerationState {
-    videoUri: string | null;
     isLoading: boolean;
+    videoUri: string | null;
     statusMessage: string;
     error: string | null;
-}
-
-// ========================================
-// Authentication & User Types
-// ========================================
-
-export interface UserProfile {
-    id: string;
-    email: string;
-    full_name?: string;
-    role: 'user' | 'admin';
-    created_at: string;
-    updated_at: string;
-}
-
-export interface AuthState {
-    user: any | null; // Supabase User type
-    profile: UserProfile | null;
-    isLoading: boolean;
-    isAuthenticated: boolean;
-    isAdmin: boolean;
-}
-
-export interface LoginCredentials {
-    email: string;
-    password: string;
-}
-
-export interface SignUpData extends LoginCredentials {
-    fullName?: string;
 }

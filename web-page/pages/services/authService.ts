@@ -1,124 +1,134 @@
+
 import { supabase } from './supabaseClient';
-import { User, AuthError, Session } from '@supabase/supabase-js';
+import { UserRole, SecurityFlag } from '../types';
 
-export interface UserProfile {
-    id: string;
-    email: string;
-    full_name?: string;
-    role: 'user' | 'admin';
-    created_at: string;
-}
-
-/**
- * Servicio de autenticación centralizado
- */
 export const authService = {
-    /**
-     * Iniciar sesión con email y contraseña
-     */
-    async signIn(email: string, password: string): Promise<{ user: User | null; error: AuthError | null }> {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            console.error('Error en login:', error.message);
-            return { user: null, error };
-        }
-
-        return { user: data.user, error: null };
-    },
-
-    /**
-     * Registrar nuevo usuario
-     */
-    async signUp(email: string, password: string, fullName?: string): Promise<{ user: User | null; error: AuthError | null }> {
+    // Sign up creates a new user. 
+    // NOTE: By default, Supabase requires email confirmation. 
+    // For this demo admin, we might need to disable that in Supabase dashboard 
+    // or verify the email manually.
+    signUp: async (email: string, password: string, fullName: string, phone: string) => {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
                 data: {
                     full_name: fullName,
+                    phone: phone,
                 },
             },
         });
-
-        if (error) {
-            console.error('Error en registro:', error.message);
-            return { user: null, error };
-        }
-
-        return { user: data.user, error: null };
+        return { data, error };
     },
 
-    /**
-     * Cerrar sesión
-     */
-    async signOut(): Promise<{ error: AuthError | null }> {
-        const { error } = await supabase.auth.signOut();
+    signIn: async (email: string, password: string) => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
 
-        if (error) {
-            console.error('Error al cerrar sesión:', error.message);
+        if (data.user) {
+            // Check if profile is active
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('status')
+                .eq('id', data.user.id)
+                .single();
+
+            if (profile && profile.status !== 'active') {
+                await supabase.auth.signOut(); // Block session
+                return {
+                    data: { user: null, session: null },
+                    error: { message: `Tu cuenta está en estado: ${profile.status}. Por favor contacta al administrador.` } as any
+                };
+            }
         }
 
+        return { data, error };
+    },
+
+    signOut: async () => {
+        const { error } = await supabase.auth.signOut();
         return { error };
     },
 
-    /**
-     * Obtener sesión actual
-     */
-    async getSession(): Promise<Session | null> {
-        const { data } = await supabase.auth.getSession();
-        return data.session;
-    },
-
-    /**
-     * Obtener usuario actual
-     */
-    async getCurrentUser(): Promise<User | null> {
+    getUser: async () => {
         const { data } = await supabase.auth.getUser();
         return data.user;
     },
 
-    /**
-     * Obtener perfil del usuario con rol
-     */
-    async getUserProfile(userId: string): Promise<UserProfile | null> {
+    // Helper to check if current user is admin via the 'public.profiles' table
+    checkIsAdmin: async (userId: string): Promise<boolean> => {
+        // 1. Try to get role from profiles table
         const { data, error } = await supabase
             .from('profiles')
-            .select('*')
+            .select('role')
             .eq('id', userId)
             .single();
 
         if (error) {
-            console.error('Error obteniendo perfil:', error.message);
-            return null;
-        }
-
-        return data as UserProfile;
-    },
-
-    /**
-     * Verificar si el usuario actual es admin
-     */
-    async isAdmin(): Promise<boolean> {
-        const user = await this.getCurrentUser();
-
-        if (!user) {
+            console.error("Error checking admin role:", error);
             return false;
         }
 
-        const profile = await this.getUserProfile(user.id);
-        return profile?.role === 'admin';
+        return data?.role === 'admin';
     },
 
-    /**
-     * Suscribirse a cambios en la autenticación
-     */
-    onAuthStateChange(callback: (user: User | null) => void) {
-        return supabase.auth.onAuthStateChange((event, session) => {
-            callback(session?.user ?? null);
-        });
+    // --- User Management (Admin Only) ---
+
+    getAllProfiles: async () => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        return { data, error };
     },
+
+    updateUserRole: async (userId: string, newRole: UserRole) => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ role: newRole })
+            .eq('id', userId)
+            .select();
+
+        return { data, error };
+    },
+
+    banUser: async (userId: string, flag: SecurityFlag, notes: string) => {
+        const { error } = await supabase
+            .from('profiles')
+            .update({
+                status: 'banned',
+                security_flag: flag,
+                security_notes: notes,
+                banned_at: new Date().toISOString()
+            })
+            .eq('id', userId);
+
+        return { error };
+    },
+
+    activateUser: async (userId: string) => {
+        const { error } = await supabase
+            .from('profiles')
+            .update({
+                status: 'active',
+                security_flag: null,
+                security_notes: null,
+                banned_at: null
+            })
+            .eq('id', userId);
+
+        return { error };
+    },
+
+    approveUser: async (userId: string) => {
+        const { error } = await supabase
+            .from('profiles')
+            .update({ status: 'active' })
+            .eq('id', userId);
+
+        return { error };
+    }
 };

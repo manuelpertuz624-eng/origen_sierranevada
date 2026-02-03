@@ -1,13 +1,36 @@
+Project name: Origen Sierra Nevada
+E-mail: origensierranevadasm@gmail.com
+password: M@nolo4912000
+
+Nombre: Admin Demo
+Correo: manuel78pertuz@gmail.com  (correo real para pruebas de notificaiones y demás)
+teléfono. 3132576302 (número real, para pruebas de  comunicación)
+contraseña: @Dmintest12345
+
 Análisis
 Planeación
 Maqueta y prototipo
 Repositorio: Diseño
 Backend : Supabase - Cliente
 servidor : Cliente
-base de datos supabase: cafemalusm@gmail.com - @-@UYpG29kf.K3Y
 
+
+base de datos supabase: cafemalusm@gmail.com - @-@UYpG29kf.K3Y
 Organization: Manuel Pertuz-Eng's Org
 Project Name: Origen Sierra Nevada SM
 Database Password: @M@nuel345116
+
+
+tunnel de producción ZROK: 
+Create a zrok "environment" by using the zrok enable command:
+	$ zrok enable y8zcrBZJ4Jr2
+
+Use the zrok share command to share network connectivity and files (see the --help in the CLI for details: zrok share --help):
+	$ zrok share public --backend-mode web. 
+
+
+
+
+
 
 labs.google.com/pomelli

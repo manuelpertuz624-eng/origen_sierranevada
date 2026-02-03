@@ -1,60 +1,51 @@
-import React, { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface ProtectedRouteProps {
-    children: ReactNode;
+    children: React.ReactNode;
     requireAdmin?: boolean;
 }
 
-/**
- * Componente para proteger rutas que requieren autenticación
- * 
- * @param requireAdmin - Si es true, solo usuarios admin pueden acceder
- */
-export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
-    const { isLoading, isAuthenticated, isAdmin } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = false }) => {
+    const { user, isAdmin, loading } = useAuth();
+    const location = useLocation();
 
-    // Mostrar loading mientras se verifica la sesión
-    if (isLoading) {
+    if (loading) {
+        // Elegant loading spinner while checking auth
         return (
-            <div className="min-h-screen bg-background-dark flex items-center justify-center">
-                <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gold mb-4"></div>
-                    <p className="text-white/60 font-sans">Verificando sesión...</p>
-                </div>
+            <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C5A065]"></div>
             </div>
         );
     }
 
-    // Si no está autenticado, redirigir a login
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+    if (!user) {
+        // Redirect to login, but save the location they were trying to go to
+        return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    // Si requiere admin y el usuario no es admin, mostrar acceso denegado
     if (requireAdmin && !isAdmin) {
+        // User is logged in but not admin
         return (
-            <div className="min-h-screen bg-background-dark flex items-center justify-center px-6">
-                <div className="max-w-md text-center">
-                    <div className="mb-6">
-                        <span className="material-symbols-outlined text-gold text-6xl">lock</span>
-                    </div>
-                    <h1 className="text-3xl font-serif text-gold mb-4">Acceso Denegado</h1>
-                    <p className="text-white/60 font-sans mb-8">
-                        Esta sección está disponible solo para administradores.
-                    </p>
-                    <button
-                        onClick={() => window.location.href = '/'}
-                        className="bg-gold text-primary px-8 py-3 rounded-lg font-sans font-bold uppercase tracking-widest hover:brightness-110 transition-all"
-                    >
-                        Volver al inicio
-                    </button>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 text-center p-4">
+                <div className="text-[#C5A065] text-6xl mb-4">
+                    <i className="fas fa-lock"></i>
                 </div>
+                <h1 className="text-3xl font-display text-white mb-2">Acceso Restringido</h1>
+                <p className="text-white/60 mb-6">Esta área es exclusiva para administradores.</p>
+                <button
+                    onClick={() => window.location.href = '/'}
+                    className="px-6 py-2 border border-[#C5A065] text-[#C5A065] rounded-full hover:bg-[#C5A065] hover:text-black transition-colors"
+                >
+                    Volver al Inicio
+                </button>
             </div>
         );
     }
 
-    // Usuario autenticado y con permisos, mostrar contenido
     return <>{children}</>;
-}
+};
+
+export default ProtectedRoute;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 
 const DarkModeToggle = () => {
     const toggleTheme = () => {
@@ -22,29 +24,17 @@ const DarkModeToggle = () => {
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const { language, toggleLanguage, t, formatPrice } = useLanguage();
+    const { user, isAdmin } = useAuth();
+    const { cartItems, removeFromCart, updateQty, cartTotal, isCartOpen, setIsCartOpen } = useCart();
 
     // State for interactions
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-
-    // Mock Cart Data
-    const [cartItems, setCartItems] = useState([
-        { id: 1, name: 'Café Malu', sub: 'Whole Bean • 12oz', price: 18.00, qty: 2, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBJmaqNUGIz6xE4QdGma3lIMlJ-DuyxXb3OOX5zNG9SOcSd5OYp3e-cAhgVRiTXsMHqb09G_OuAdnJN-iUu6DBV67iDtXxJtit_tFJeVSpnVGYIkHZ5GiWKqaPjtsVD8uBR6wK7CT4aH8T-zXsWJvvF0GkTVqHWDCcdMMYPlwogER_cbbGAJ1wHdBmV_D0IxsKmqgczIR3AtplPoCTmoCxRUcm5-f5GWw1Z8eZQ5X-U2ziM1KOfK4CrF-B3QGT-C9FmrR4KWav9ymMf' },
-        { id: 2, name: 'V60 Filters', sub: 'Pack of 100', price: 8.50, qty: 1, img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZv5nOjp7zmCZWGky4raehhN3mKOLVPfk7eSBc9HNBjO5_kEG1uLCwIfoV2zizjbqLyiS1aAl43qdi4ZMZ3OVO59JxWHZp6TgX6Sw11WEvi_-nzkn5hoEVagZgtxAfYnZgN-h8LhD3zDWvYUSqSYDSFQCQSutsQeJpn7hZcVzpF1vXFP9OjLupDWW_HSc7b0YfZAOUNk9jSQA6kohzyMdBLFhCICbYLZlzToOGgmQZufO0hnnEcHt2CHFGM_tqMBUlTY4q109L_afn' }
-    ]);
-
-    const cartTotal = cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
-
-    const removeCartItem = (id: number) => {
-        setCartItems(prev => prev.filter(item => item.id !== id));
-    };
 
     // Close menus on route change
     useEffect(() => {
         setIsSearchOpen(false);
-        setIsCartOpen(false);
         setIsMobileMenuOpen(false);
     }, [navigate]);
 
@@ -65,21 +55,74 @@ const Navbar: React.FC = () => {
 
     return (
         <>
-            <nav className={`fixed w-full z-50 top-0 transition-all duration-500 ${isScrolled
-                ? 'bg-background-dark/95 backdrop-blur-md py-3 shadow-lg border-b border-primary/20'
-                : 'bg-gradient-to-b from-black/80 to-transparent py-6 border-b border-transparent'
+            <nav className={`fixed w-full z-50 top-0 transition-all duration-500 flex flex-col items-center ${isScrolled
+                ? 'bg-background-dark/95 backdrop-blur-md shadow-lg border-b border-primary/20'
+                : 'bg-gradient-to-b from-black/80 to-transparent border-b border-transparent'
                 }`}>
-                <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
 
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className={`lg:hidden p-2 rounded-full transition-colors ${isScrolled ? 'text-white hover:bg-white/10' : 'text-white hover:text-primary'}`}
-                    >
-                        <span className="material-icons-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
-                    </button>
+                {/* 1. MOBILE LAYOUT (Stacked) - Visible only on LG and below */}
+                <div className="w-full lg:hidden flex flex-col bg-[#050806] border-b border-white/10 shadow-xl">
+                    {/* Top Tier: Logo Throne */}
+                    <div className="w-full flex justify-center py-3 border-b border-white/5">
+                        <img
+                            src="/logo-origen-sierra-nevada.svg"
+                            alt="Origen Sierra Nevada"
+                            className="h-10 w-auto max-w-[180px] object-contain drop-shadow-md filter brightness-110"
+                            onClick={() => navigate('/')}
+                        />
+                    </div>
 
-                    {/* Logo (Centered in Mobile, Left in Desktop) */}
+                    {/* Bottom Tier: Control Bar */}
+                    <div className="w-full flex justify-between items-center px-6 py-3">
+                        {/* Left: Menu Trigger */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="text-white hover:text-primary transition-colors p-1"
+                        >
+                            <span className="material-icons-outlined text-xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
+                        </button>
+
+                        {/* Right: Actions */}
+                        <div className="flex items-center gap-3">
+                            {/* Language (Mobile) */}
+                            <button
+                                onClick={toggleLanguage}
+                                className="text-white text-[10px] font-accent border border-white/20 rounded px-1.5 py-0.5 hover:border-primary hover:text-primary transition-colors"
+                            >
+                                {language.toUpperCase()}
+                            </button>
+
+                            {/* Dark Mode (Mobile) */}
+                            <div className="scale-75 origin-center">
+                                <DarkModeToggle />
+                            </div>
+
+                            <button
+                                onClick={() => setIsSearchOpen(true)}
+                                className="text-white hover:text-primary transition-colors p-1 ml-2"
+                            >
+                                <span className="material-icons-outlined text-xl">search</span>
+                            </button>
+
+                            <div
+                                className="relative cursor-pointer text-white hover:text-primary transition-colors p-1"
+                                onClick={() => setIsCartOpen(true)}
+                            >
+                                <span className="material-icons-outlined text-xl">shopping_bag</span>
+                                {cartItems.length > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-primary text-background-dark text-[9px] font-bold h-3.5 w-3.5 flex items-center justify-center rounded-full border border-black">
+                                        {cartItems.length}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* 2. DESKTOP LAYOUT (Classic Row) - Visible only on LG+ */}
+                <div className="hidden lg:flex max-w-7xl mx-auto px-6 w-full justify-between items-center py-4">
+                    {/* Logo */}
                     <div
                         className="flex items-center gap-3 group cursor-pointer"
                         onClick={() => navigate('/')}
@@ -89,45 +132,64 @@ const Navbar: React.FC = () => {
                             alt="Origen Sierra Nevada"
                             className={`transition-all duration-500 ${isScrolled ? 'h-10' : 'h-12'} w-auto drop-shadow-md`}
                         />
-                        {/* Text hidden as it is included in the new logo
-                        <div className="flex flex-col hidden sm:flex">
-                            <div className="font-display font-bold text-white tracking-[0.1em] text-lg leading-none mb-1">
-                                ORIGEN
-                            </div>
-                            <div className="font-accent text-primary tracking-[0.2em] text-[0.6rem] leading-none">
-                                SIERRA NEVADA
-                            </div>
-                        </div>
-                        */}
                     </div>
 
 
                     {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center space-x-8 font-display text-sm tracking-widest text-white">
+                    <div className="flex items-center space-x-8 font-display text-sm tracking-widest text-white">
                         <Link to="/catalog?filter=coffee" className="hover:text-primary transition-colors">CAFÉ ORIGEN</Link>
                         <Link to="/catalog?filter=accessories" className="hover:text-primary transition-colors">ACCESORIOS</Link>
-                        <Link to="/catalog?filter=derivatives" className="hover:text-primary transition-colors">DERIVADOS</Link>
+                        <Link to="/catalog?filter=derivates" className="hover:text-primary transition-colors">DERIVADOS</Link>
+                        {isAdmin && (
+                            <Link to="/admin" className="hover:text-white transition-colors text-[#C5A065] border border-[#C5A065]/50 px-3 py-1 rounded-full bg-[#C5A065]/5 flex items-center gap-2 hover:bg-[#C5A065] hover:border-[#C5A065] hover:text-black transition-all">
+                                <span className="material-icons-outlined text-sm">admin_panel_settings</span>
+                                ADMIN
+                            </Link>
+                        )}
                     </div>
 
                     {/* Desktop Actions */}
                     <div className="flex items-center space-x-4 text-white">
-                        <button
-                            onClick={() => navigate('/login')}
-                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
-                            title="Iniciar Sesión"
-                        >
-                            <span className="material-icons-outlined">login</span>
-                        </button>
+                        {user ? (
+                            <div className="flex items-center gap-3">
+                                <div
+                                    className="hidden xl:block text-right cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => navigate('/account')}
+                                    title="Ir a mi cuenta"
+                                >
+                                    <p className="text-[10px] text-[#C5A065] uppercase tracking-widest font-bold">HOLA</p>
+                                    <p className="text-xs text-white max-w-[100px] truncate">{user.email?.split('@')[0]}</p>
+                                </div>
+                                <button
+                                    onClick={async () => {
+                                        await import('../services/authService').then(m => m.authService.signOut());
+                                        window.location.href = '/';
+                                    }}
+                                    className="p-2 rounded-full hover:bg-white/10 hover:text-red-400 transition-colors"
+                                    title="Cerrar Sesión"
+                                >
+                                    <span className="material-icons-outlined">logout</span>
+                                </button>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => navigate('/login')}
+                                className="p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+                                title="Iniciar Sesión"
+                            >
+                                <span className="material-icons-outlined">login</span>
+                            </button>
+                        )}
                         <button
                             onClick={() => navigate('/ai-lab')}
-                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+                            className="p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
                             title={t('nav.ai')}
                         >
                             <span className="material-icons-outlined">science</span>
                         </button>
                         <button
                             onClick={() => setIsSearchOpen(true)}
-                            className="hidden lg:block p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
+                            className="p-2 rounded-full hover:bg-white/10 hover:text-primary transition-colors"
                         >
                             <span className="material-icons-outlined">search</span>
                         </button>
@@ -158,36 +220,53 @@ const Navbar: React.FC = () => {
                 </div>
             </nav>
 
-            {/* Mobile Menu Drawer */}
-            <div className={`fixed inset-0 z-30 bg-background-light dark:bg-background-dark pt-24 px-6 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'} lg:hidden`}>
-                <div className="flex flex-col gap-6">
-                    <Link to="/" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.home')}</Link>
-                    <Link to="/catalog?filter=coffee" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">CAFÉ ORIGEN</Link>
-                    <Link to="/catalog?filter=accessories" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">ACCESORIOS</Link>
-                    <Link to="/catalog?filter=derivatives" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">DERIVADOS</Link>
-                    <Link to="/subscription" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.sub')}</Link>
-                    <Link to="/guide" className="text-2xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">{t('nav.guide')}</Link>
-                    <Link to="/ai-lab" className="text-2xl font-display font-bold text-primary border-b border-primary/30 pb-4 flex items-center justify-between">
-                        {t('nav.ai')} <span className="material-icons-outlined">science</span>
-                    </Link>
+            {/* Mobile Menu Drawer - SLIDE FROM LEFT */}
+            <div className={`fixed inset-0 z-40 bg-background-light dark:bg-background-dark pt-[140px] px-6 transition-transform duration-500 transform lg:hidden shadow-2xl ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full invisible'}`}>
+                <div className="flex flex-col gap-6 animate-fade-in-right" style={{ animationDelay: '0.2s' }}>
 
-                    <button
-                        onClick={() => setIsSearchOpen(true)}
-                        className="text-left text-lg font-body text-gray-600 dark:text-gray-400 flex items-center gap-2 mt-4"
-                    >
-                        <span className="material-icons-outlined">search</span> {t('nav.search_placeholder')}
-                    </button>
-                    <button
-                        onClick={toggleLanguage}
-                        className="text-left text-lg font-body text-gray-600 dark:text-gray-400 flex items-center gap-2 mt-4 border-t border-gray-200 dark:border-gray-800 pt-4"
-                    >
-                        <span className="material-icons-outlined">language</span> {language === 'es' ? 'Cambiar a English' : 'Switch to Español'}
-                    </button>
+                    {/* Mobile User Profile Section */}
+                    {user ? (
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-2 flex items-center justify-between">
+                            <div className="flex items-center gap-3" onClick={() => { navigate('/account'); setIsMobileMenuOpen(false); }}>
+                                <div className="w-10 h-10 rounded-full bg-[#C5A065]/20 flex items-center justify-center text-[#C5A065] font-bold">
+                                    {user.email?.charAt(0).toUpperCase()}
+                                </div>
+                                <div className="overflow-hidden">
+                                    <p className="text-white font-bold text-sm truncate w-32">{user.user_metadata?.full_name || 'Usuario'}</p>
+                                    <p className="text-gray-400 text-xs truncate w-32">{user.email}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={async () => {
+                                    await import('../services/authService').then(m => m.authService.signOut());
+                                    window.location.href = '/';
+                                }}
+                                className="p-2 text-red-400 hover:bg-white/5 rounded-full"
+                            >
+                                <span className="material-icons-outlined">logout</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }}
+                            className="bg-[#C5A065] text-black font-bold uppercase tracking-widest py-3 rounded-lg mb-4 hover:bg-[#D4B075]"
+                        >
+                            Iniciar Sesión
+                        </button>
+                    )}
+
+                    <Link to="/" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">{t('nav.home')}</Link>
+                    <Link to="/catalog?filter=coffee" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">CAFÉ ORIGEN</Link>
+                    <Link to="/catalog?filter=accessories" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">ACCESORIOS</Link>
+                    <Link to="/catalog?filter=derivates" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">DERIVADOS</Link>
+                    <Link to="/guide" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">{t('nav.guide')}</Link>
+
+
                 </div>
             </div>
 
             {/* Cart Drawer */}
-            <div className={`fixed inset-0 z-50 pointer-events-none overflow-hidden ${isCartOpen ? 'pointer-events-auto' : ''}`}>
+            <div className={`fixed inset-0 z-50 overflow-hidden ${isCartOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                 <div
                     className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isCartOpen ? 'opacity-100' : 'opacity-0'}`}
                     onClick={() => setIsCartOpen(false)}
@@ -209,16 +288,34 @@ const Navbar: React.FC = () => {
                             </div>
                         ) : (
                             cartItems.map(item => (
-                                <div key={item.id} className="flex gap-4 items-center animate-fade-in">
-                                    <div className="w-20 h-20 bg-gray-100 dark:bg-black/20 rounded-md p-2 flex-shrink-0">
+                                <div key={item.id} className="flex gap-4 items-center animate-fade-in group">
+                                    <div className="w-20 h-20 bg-gray-100 dark:bg-black/20 rounded-lg p-2 flex-shrink-0 border border-gray-200 dark:border-white/5 group-hover:border-primary/30 transition-colors">
                                         <img src={item.img} className="w-full h-full object-contain filter sepia-[.2]" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-display text-gray-900 dark:text-white">{item.name}</h3>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{item.sub}</p>
-                                        <p className="font-bold text-primary">{formatPrice(item.price)}</p>
+                                    <div className="flex-1 text-left">
+                                        <h3 className="font-display text-gray-900 dark:text-white text-sm leading-tight">{item.name}</h3>
+                                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-tight">{item.sub}</p>
+
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex items-center bg-gray-100 dark:bg-white/5 rounded-md border border-gray-200 dark:border-white/10">
+                                                <button
+                                                    onClick={() => updateQty(item.id, item.qty - 1)}
+                                                    className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors"
+                                                >
+                                                    <span className="material-icons-outlined text-sm">remove</span>
+                                                </button>
+                                                <span className="w-8 text-center text-xs font-bold text-gray-900 dark:text-white">{item.qty}</span>
+                                                <button
+                                                    onClick={() => updateQty(item.id, item.qty + 1)}
+                                                    className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary transition-colors"
+                                                >
+                                                    <span className="material-icons-outlined text-sm">add</span>
+                                                </button>
+                                            </div>
+                                            <span className="font-bold text-primary text-sm">{formatPrice(item.price * item.qty)}</span>
+                                        </div>
                                     </div>
-                                    <button onClick={() => removeCartItem(item.id)} className="text-gray-400 hover:text-red-500 p-2">
+                                    <button onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500 p-2 transition-colors">
                                         <span className="material-icons-outlined">delete_outline</span>
                                     </button>
                                 </div>
@@ -241,7 +338,7 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Full Screen Search Overlay */}
-            <div className={`fixed inset-0 z-50 bg-background-dark/95 backdrop-blur-xl transition-all duration-300 ${isSearchOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+            <div className={`fixed inset-0 z-50 bg-background-dark/95 backdrop-blur-xl transition-all duration-300 ${isSearchOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
                 <div className="max-w-4xl mx-auto px-6 pt-32 h-full flex flex-col">
                     <div className="relative border-b-2 border-primary/50 focus-within:border-primary transition-colors">
                         <span className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400">

@@ -1,207 +1,90 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User } from '@supabase/supabase-js';
-import { authService, UserProfile } from '../services/authService';
-import { AuthState, LoginCredentials, SignUpData } from '../types';
 
-interface AuthContextType extends AuthState {
-    signIn: (credentials: LoginCredentials) => Promise<{ error: string | null }>;
-    signUp: (data: SignUpData) => Promise<{ error: string | null }>;
-    signOut: () => Promise<void>;
-    refreshProfile: () => Promise<void>;
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '../services/supabaseClient';
+import { authService } from '../services/authService';
+
+interface AuthContextType {
+    user: User | null;
+    isAdmin: boolean;
+    loading: boolean;
+    refreshAuth: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+    user: null,
+    isAdmin: false,
+    loading: true,
+    refreshAuth: async () => { },
+});
 
-/**
- * Provider de autenticación
- * Maneja el estado global de autenticación y provee funciones para login/logout
- */
-export function AuthProvider({ children }: { children: ReactNode }) {
-    const [authState, setAuthState] = useState<AuthState>({
-        user: null,
-        profile: null,
-        isLoading: true,
-        isAuthenticated: false,
-        isAdmin: false,
-    });
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    /**
-     * Cargar perfil del usuario
-     */
-    const loadProfile = async (user: User): Promise<UserProfile | null> => {
+    const checkUserRole = async (currentUser: User | null) => {
+        if (!currentUser) {
+            setIsAdmin(false);
+            return;
+        }
+        // Timeout protection: If DB doesn't answer in 3s, assume user is NOT admin initially
         try {
-            const profile = await authService.getUserProfile(user.id);
-            return profile;
+            const adminPromise = authService.checkIsAdmin(currentUser.id);
+            const timeoutPromise = new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000));
+
+            const adminStatus = await Promise.race([adminPromise, timeoutPromise]);
+            setIsAdmin(adminStatus);
+        } catch (e) {
+            console.error("Role check failed", e);
+            setIsAdmin(false);
+        }
+    };
+
+    const refreshAuth = async () => {
+        // Don't set global loading to true on manual refresh to avoid UI flickering/blocking
+        // setLoading(true); 
+        try {
+            const currentUser = await authService.getUser();
+            setUser(currentUser);
+            // We await this, but now it has a timeout protection inside
+            await checkUserRole(currentUser);
         } catch (error) {
-            console.error('Error cargando perfil:', error);
-            return null;
+            console.error("Error refreshing auth:", error);
+            setUser(null);
+            setIsAdmin(false);
+        } finally {
+            setLoading(false);
         }
     };
 
-    /**
-     * Refrescar perfil del usuario actual
-     */
-    const refreshProfile = async () => {
-        const user = await authService.getCurrentUser();
-        if (user) {
-            const profile = await loadProfile(user);
-            setAuthState(prev => ({
-                ...prev,
-                profile,
-                isAdmin: profile?.role === 'admin',
-            }));
-        }
-    };
-
-    /**
-     * Iniciar sesión
-     */
-    const signIn = async (credentials: LoginCredentials): Promise<{ error: string | null }> => {
-        setAuthState(prev => ({ ...prev, isLoading: true }));
-
-        const { user, error } = await authService.signIn(credentials.email, credentials.password);
-
-        if (error || !user) {
-            setAuthState(prev => ({ ...prev, isLoading: false }));
-            return { error: error?.message || 'Error al iniciar sesión' };
-        }
-
-        const profile = await loadProfile(user);
-
-        setAuthState({
-            user,
-            profile,
-            isLoading: false,
-            isAuthenticated: true,
-            isAdmin: profile?.role === 'admin',
-        });
-
-        return { error: null };
-    };
-
-    /**
-     * Registrar nuevo usuario
-     */
-    const signUp = async (data: SignUpData): Promise<{ error: string | null }> => {
-        setAuthState(prev => ({ ...prev, isLoading: true }));
-
-        const { user, error } = await authService.signUp(data.email, data.password, data.fullName);
-
-        if (error || !user) {
-            setAuthState(prev => ({ ...prev, isLoading: false }));
-            return { error: error?.message || 'Error al registrar usuario' };
-        }
-
-        // Esperar un momento para que se cree el perfil vía trigger
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        const profile = await loadProfile(user);
-
-        setAuthState({
-            user,
-            profile,
-            isLoading: false,
-            isAuthenticated: true,
-            isAdmin: profile?.role === 'admin',
-        });
-
-        return { error: null };
-    };
-
-    /**
-     * Cerrar sesión
-     */
-    const signOut = async () => {
-        await authService.signOut();
-        setAuthState({
-            user: null,
-            profile: null,
-            isLoading: false,
-            isAuthenticated: false,
-            isAdmin: false,
-        });
-    };
-
-    /**
-     * Verificar sesión al cargar la app
-     */
     useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const session = await authService.getSession();
+        // Initial check
+        refreshAuth();
 
-                if (session?.user) {
-                    const profile = await loadProfile(session.user);
-
-                    setAuthState({
-                        user: session.user,
-                        profile,
-                        isLoading: false,
-                        isAuthenticated: true,
-                        isAdmin: profile?.role === 'admin',
-                    });
-                } else {
-                    setAuthState(prev => ({ ...prev, isLoading: false }));
-                }
-            } catch (error) {
-                console.error('Error verificando sesión:', error);
-                setAuthState(prev => ({ ...prev, isLoading: false }));
-            }
-        };
-
-        checkSession();
-
-        // Suscribirse a cambios de autenticación
-        const { data: { subscription } } = authService.onAuthStateChange(async (user) => {
-            if (user) {
-                const profile = await loadProfile(user);
-                setAuthState({
-                    user,
-                    profile,
-                    isLoading: false,
-                    isAuthenticated: true,
-                    isAdmin: profile?.role === 'admin',
-                });
+        // Listen for auth changes
+        const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("Auth event:", event);
+            if (session?.user) {
+                setUser(session.user);
+                await checkUserRole(session.user);
             } else {
-                setAuthState({
-                    user: null,
-                    profile: null,
-                    isLoading: false,
-                    isAuthenticated: false,
-                    isAdmin: false,
-                });
+                setUser(null);
+                setIsAdmin(false);
             }
+            setLoading(false);
         });
 
         return () => {
-            subscription.unsubscribe();
+            authListener.subscription.unsubscribe();
         };
     }, []);
 
-    const value: AuthContextType = {
-        ...authState,
-        signIn,
-        signUp,
-        signOut,
-        refreshProfile,
-    };
-
     return (
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider value={{ user, isAdmin, loading, refreshAuth }}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
 
-/**
- * Hook para usar el contexto de autenticación
- */
-export function useAuth(): AuthContextType {
-    const context = useContext(AuthContext);
-
-    if (context === undefined) {
-        throw new Error('useAuth debe usarse dentro de un AuthProvider');
-    }
-
-    return context;
-}
+export const useAuth = () => useContext(AuthContext);
