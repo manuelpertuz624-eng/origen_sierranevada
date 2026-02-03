@@ -179,7 +179,7 @@ const UserManager: React.FC = () => {
                                 <div className="border-b-4 border-[#C5A065]/20">
                                     <div className="bg-[#C5A065]/5 p-4 flex items-center gap-3">
                                         <span className="material-icons-outlined text-[#C5A065]">pending_actions</span>
-                                        <h3 className="text-[#C5A065] text-xs font-bold uppercase tracking-[0.2em]">Prioridad: Solicitudes de Curaduría</h3>
+                                        <h3 className="text-[#C5A065] text-xs font-bold uppercase tracking-[0.2em]">Prioridad: Solicitudes por Autorizar</h3>
                                     </div>
                                     <table className="w-full text-left border-collapse">
                                         <tbody className="bg-[#C5A065]/5 divide-y divide-[#C5A065]/10">

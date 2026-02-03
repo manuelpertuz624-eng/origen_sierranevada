@@ -1,5 +1,8 @@
 import { supabase } from './supabaseClient';
 
+const BASE_URL = 'https://origen2025.share.zrok.io';
+const LOGO_URL = `${BASE_URL}/logo-origen-sierra-nevada.svg`;
+
 export const emailService = {
     sendWelcomeEmail: async (email: string, fullName: string) => {
         try {
@@ -34,7 +37,7 @@ export const emailService = {
                                 <div class="hero">
                                     <div class="overlay"></div>
                                     <div style="position: absolute; bottom: 40px; width: 100%; text-align: center;">
-                                        <img src="https://origen2025.share.zrok.io/logo-origen-sierra-nevada.svg" class="logo" alt="Logo">
+                                        <img src="${LOGO_URL}" class="logo" alt="Logo">
                                     </div>
                                 </div>
                                 <div class="content">
@@ -43,14 +46,14 @@ export const emailService = {
                                     
                                     <div class="status-card">
                                         <span class="status-label">Estado de la Membresía</span>
-                                        <div class="status-text">Fase de Curaduría y Bienvenida</div>
-                                        <p style="margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.5);">Nuestros sumilleres y fundadores están revisando tu perfil para garantizar la mejor experiencia. Recibirás una señal en un plazo de 24 a 48 horas.</p>
+                                        <div class="status-text">En Espera de Autorización</div>
+                                        <p style="margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.5);">Nuestros sumilleres y fundadores están revisando tu solicitud para nivelar la experiencia. Recibirás una señal en un plazo de 24 a 48 horas.</p>
                                     </div>
 
                                     <p style="font-style: italic; font-size: 14px; color: #C5A065;">"Todo lo que amas, desde el corazón de la Sierra."</p>
                                     
                                     <div style="margin-top: 40px;">
-                                        <a href="https://origen2025.share.zrok.io" class="btn">Explorar el Origen</a>
+                                        <a href="${BASE_URL}" class="btn">Explorar el Origen</a>
                                     </div>
                                 </div>
                                 <div class="footer">
@@ -105,13 +108,13 @@ export const emailService = {
                                     </div>
                                 </div>
                                 <div class="content">
-                                    <img src="https://origen2025.share.zrok.io/logo-origen-sierra-nevada.svg" class="logo" alt="Logo">
+                                    <img src="${LOGO_URL}" class="logo" alt="Logo">
                                     <h1>Tu registro ha sido aprobado</h1>
                                     <p>Hola, <strong>${fullName}</strong>. <br><br> La montaña ha hablado. Tu alma ha sido bienvenida al círculo interno de Origen Sierra Nevada.</p>
                                     <p>Ahora tienes acceso total a nuestro catálogo exclusivo, el Brandbook interactivo y beneficios únicos de nuestra comunidad de amantes del café de especialidad.</p>
                                     
                                     <div style="margin: 40px 0;">
-                                        <a href="https://origen2025.share.zrok.io/login" class="btn">Iniciar el Ritual de Compra</a>
+                                        <a href="${BASE_URL}/#/login" class="btn">Iniciar el Ritual de Compra</a>
                                     </div>
 
                                     <p style="font-size: 13px; color: rgba(255,255,255,0.4);">Prepárate para redescubrir lo que significa una verdadera taza de café.</p>
@@ -148,7 +151,7 @@ export const emailService = {
                                 <pre style="margin: 0; color: #FBF5B7; font-size: 14px;">${JSON.stringify(details, null, 2)}</pre>
                             </div>
                             <div style="margin-top: 32px; text-align: center;">
-                                <a href="https://origen2025.share.zrok.io/admin" style="background: #C5A065; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase;">Abrir Panel de Control</a>
+                                <a href="${BASE_URL}/#/admin" style="background: #C5A065; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase;">Abrir Panel de Control</a>
                             </div>
                         </div>
                     `
@@ -159,6 +162,62 @@ export const emailService = {
             return { success: true, data };
         } catch (error) {
             console.error('Error in sendOrderNotification:', error);
+            return { success: false, error };
+        }
+    },
+
+    sendCustomerOrderEmail: async (email: string, fullName: string, orderDetails: any) => {
+        try {
+            const { data, error } = await supabase.functions.invoke('send-email', {
+                body: {
+                    to: email,
+                    subject: `☕ Tu Ritual está en camino - Pedido #${orderDetails.orderId.slice(0, 8)}`,
+                    html: `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <style>
+                                body { margin: 0; padding: 0; background-color: #050806; font-family: 'Segoe UI', sans-serif; }
+                                .container { max-width: 600px; margin: 20px auto; background-color: #050806; border: 1px solid #C5A065; border-radius: 24px; overflow: hidden; color: white; }
+                                .content { padding: 40px; text-align: center; }
+                                h1 { color: #C5A065; font-size: 28px; margin-bottom: 20px; }
+                                .order-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; text-align: left; margin: 24px 0; }
+                                .item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+                                .total { border-top: 1px solid rgba(197,160,101,0.3); margin-top: 16px; padding-top: 16px; font-weight: bold; color: #C5A065; font-size: 18px; }
+                                .footer { padding: 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); font-size: 10px; color: rgba(255,255,255,0.3); }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <div class="content">
+                                    <img src="${LOGO_URL}" width="80" style="margin-bottom: 20px;">
+                                    <h1>¡Gracias por tu compra!</h1>
+                                    <p>Hola ${fullName}, tu selección de café de especialidad está siendo preparada.</p>
+                                    
+                                    <div class="order-card">
+                                        <p style="color: #C5A065; font-size: 10px; text-transform: uppercase; font-weight: bold; margin-bottom: 16px;">Resumen del Pedido</p>
+                                        <div style="color: rgba(255,255,255,0.7);">
+                                            ${orderDetails.itemsSummary}
+                                        </div>
+                                        <div class="total">
+                                            <span>Total Pagado:</span>
+                                            <span style="float: right;">$${orderDetails.total.toFixed(2)}</span>
+                                        </div>
+                                    </div>
+
+                                    <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Recibirás una notificación cuando tu pedido sea despachado.</p>
+                                    <a href="${BASE_URL}/#/account" style="display: inline-block; background: #C5A065; color: #000; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; margin-top: 24px; font-size: 12px; text-transform: uppercase;">Rastrear mi pedido</a>
+                                </div>
+                                <div class="footer">ORIGEN SIERRA NEVADA SM • SANTA MARTA, COLOMBIA</div>
+                            </div>
+                        </body>
+                        </html>
+                    `
+                }
+            });
+            return { success: !error, data };
+        } catch (error) {
             return { success: false, error };
         }
     }

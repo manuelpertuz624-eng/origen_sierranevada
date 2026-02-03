@@ -337,7 +337,10 @@ const Navbar: React.FC = () => {
                                 <span className="font-accent text-xs font-bold text-gray-500 uppercase tracking-widest">{t('nav.subtotal')}</span>
                                 <span className="font-display text-2xl text-gray-900 dark:text-white">{formatPrice(cartTotal)}</span>
                             </div>
-                            <button className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 rounded-lg uppercase tracking-widest transition-all transform active:scale-95 shadow-lg shadow-primary/20">
+                            <button
+                                onClick={() => { setIsCartOpen(false); navigate('/checkout'); }}
+                                className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 rounded-lg uppercase tracking-widest transition-all transform active:scale-95 shadow-lg shadow-primary/20"
+                            >
                                 {t('nav.checkout')}
                             </button>
                         </div>

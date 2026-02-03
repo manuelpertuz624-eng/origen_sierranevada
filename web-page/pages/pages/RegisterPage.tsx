@@ -98,7 +98,7 @@ const RegisterPage: React.FC = () => {
                     <p className="text-gray-400 mb-8 leading-relaxed">
                         Es un placer tenerte con nosotros en <span className="text-[#C5A065] font-bold">Origen Sierra Nevada</span>.
                         <br /><br />
-                        Para mantener la exclusividad y calidad de nuestra comunidad, tu solicitud ha pasado a nuestra <span className="text-[#C5A065]">Fase de Bienvenida y Curaduría</span>.
+                        Para mantener la exclusividad y calidad de nuestra comunidad, tu solicitud ha pasado a nuestra <span className="text-[#C5A065]">Fase de Bienvenida y Autorización</span>.
                         <br /><br />
                         Te enviaremos un correo electrónico en cuanto tu perfil haya sido habilitado para iniciar el ritual de la mejor experiencia cafetera.
                     </p>

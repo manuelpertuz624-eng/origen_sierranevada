@@ -87,7 +87,7 @@ const AdminDashboard: React.FC = () => {
                             </div>
                             <div>
                                 <p className="text-[#C5A065] text-[10px] font-bold uppercase tracking-widest">Ritual Pendiente</p>
-                                <p className="text-white text-sm font-medium">Hay {pendingCount} {pendingCount === 1 ? 'solicitud' : 'solicitudes'} esperando curaduría</p>
+                                <p className="text-white text-sm font-medium">Hay {pendingCount} {pendingCount === 1 ? 'solicitud' : 'solicitudes'} en espera de autorización</p>
                             </div>
                         </div>
                     )}
@@ -146,6 +146,24 @@ const AdminDashboard: React.FC = () => {
                         </p>
                         <button className="flex items-center gap-2 text-[#C5A065] text-sm font-bold tracking-widest uppercase group-hover:gap-4 transition-all">
                             Ver Equipo
+                            <span className="material-icons-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+
+                    {/* Tarjeta: Gestión de Pedidos */}
+                    <div
+                        onClick={() => navigate('/admin/orders')}
+                        className="group relative bg-white/5 border border-[#C5A065]/20 hover:border-[#C5A065] p-8 rounded-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(197,160,101,0.1)] cursor-pointer"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <span className="material-icons-outlined text-4xl text-[#C5A065] font-bold">shopping_bag</span>
+                        </div>
+                        <h3 className="text-2xl font-serif text-white mb-4 group-hover:text-[#C5A065] transition-colors">Bitácora de Pedidos</h3>
+                        <p className="text-gray-400 font-light mb-6 text-sm leading-relaxed">
+                            Monitorea transacciones, actualiza estados de envío y gestiona el historial de ventas del ritual.
+                        </p>
+                        <button className="flex items-center gap-2 text-[#C5A065] text-sm font-bold tracking-widest uppercase group-hover:gap-4 transition-all">
+                            Ver Pedidos
                             <span className="material-icons-outlined text-sm">arrow_forward</span>
                         </button>
                     </div>

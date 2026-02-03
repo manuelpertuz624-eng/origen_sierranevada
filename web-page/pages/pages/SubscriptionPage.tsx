@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { FlavorProfile, CoffeeFormat } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import SEO from '../components/SEO';
 
 const SubscriptionPage: React.FC = () => {
     const navigate = useNavigate();
@@ -13,38 +14,38 @@ const SubscriptionPage: React.FC = () => {
     const [showSuccess, setShowSuccess] = useState(false);
 
     const flavors: FlavorProfile[] = [
-        { 
-            id: 'chocolate', 
-            title: language === 'es' ? 'Chocolate Negro y Nueces' : 'Dark Chocolate & Nuts', 
-            desc: language === 'es' ? 'Tonos profundos y reconfortantes de cacao, almendras tostadas y caramelo.' : 'Deep, comforting tones of cacao, toasted almonds, and caramel.', 
-            icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDtKzJaQPx9f8PmDmCilO1DeDJrZYpF-ct6zIKPMyL1awczZUsOpTy1jOdZCSHcMOY6kE28iRAZvPaeO9gI3hoUmjYusIPNAK-FybrXmwEPJI281TXdirZ8-nfcwfjijphU5i87gDEAMqZxPZ65o0kmITM-2QuAMaIZ_A9-R-ISVH8uzFiRZ60ByxL9v-VEbjEXNrGUTFgHWJy1I7Fkh5I8gEYUZ-P_ol-O8ERH3I1okPyuVCO4hzqizvPJvgYnxySUy9Hd9plkvOwX' 
+        {
+            id: 'chocolate',
+            title: language === 'es' ? 'Chocolate Negro y Nueces' : 'Dark Chocolate & Nuts',
+            desc: language === 'es' ? 'Tonos profundos y reconfortantes de cacao, almendras tostadas y caramelo.' : 'Deep, comforting tones of cacao, toasted almonds, and caramel.',
+            icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDtKzJaQPx9f8PmDmCilO1DeDJrZYpF-ct6zIKPMyL1awczZUsOpTy1jOdZCSHcMOY6kE28iRAZvPaeO9gI3hoUmjYusIPNAK-FybrXmwEPJI281TXdirZ8-nfcwfjijphU5i87gDEAMqZxPZ65o0kmITM-2QuAMaIZ_A9-R-ISVH8uzFiRZ60ByxL9v-VEbjEXNrGUTFgHWJy1I7Fkh5I8gEYUZ-P_ol-O8ERH3I1okPyuVCO4hzqizvPJvgYnxySUy9Hd9plkvOwX'
         },
-        { 
-            id: 'fruity', 
-            title: language === 'es' ? 'Floral y Frutos Rojos' : 'Floral & Red Berries', 
-            desc: language === 'es' ? 'Brillante y vivo con notas de jazmín, fresas silvestres y ralladura de cítricos.' : 'Bright and lively with hints of jasmine, wild strawberries, and citrus zest.', 
-            icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAGpvAGMakntpimb1DZDp8_vel0YXIjSIicXSmM743lT-YmHWrls1Ioit-6X5VG-bqv8WtLTZ98nyj6cOhXgnbN2RYqnyfFTdFcR60hFxsih-uOoZHDrJ1tM0GMXH9T1SOwJg1mimtL4Xc3ucbaH44egDFRVEHu2L_hfnWYHtL-fkQuFm4XIr6v1YxkbOScsEvxN5PHPgBiH-NEarB7KpBcrP7va90x0GRyAT_pgBgCJYHDlnLhnIPMU09ieYiPVjyB5es_mEa9j8ri' 
+        {
+            id: 'fruity',
+            title: language === 'es' ? 'Floral y Frutos Rojos' : 'Floral & Red Berries',
+            desc: language === 'es' ? 'Brillante y vivo con notas de jazmín, fresas silvestres y ralladura de cítricos.' : 'Bright and lively with hints of jasmine, wild strawberries, and citrus zest.',
+            icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAGpvAGMakntpimb1DZDp8_vel0YXIjSIicXSmM743lT-YmHWrls1Ioit-6X5VG-bqv8WtLTZ98nyj6cOhXgnbN2RYqnyfFTdFcR60hFxsih-uOoZHDrJ1tM0GMXH9T1SOwJg1mimtL4Xc3ucbaH44egDFRVEHu2L_hfnWYHtL-fkQuFm4XIr6v1YxkbOScsEvxN5PHPgBiH-NEarB7KpBcrP7va90x0GRyAT_pgBgCJYHDlnLhnIPMU09ieYiPVjyB5es_mEa9j8ri'
         }
     ];
 
     const formats: CoffeeFormat[] = [
-        { 
-            id: 'wholebean', 
-            title: language === 'es' ? 'Grano Entero' : 'Whole Bean', 
-            desc: language === 'es' ? 'Máxima frescura' : 'Maximum freshness', 
-            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJx8Et4HVW3XszhYo2FMkfFtOFIikw5gNxHBy11rrl6So9Tiz17P_1j6_81lwG1TcisB43pMoLHGfncypIsxoSVTUdOTG9xr2EmyREOu23Io9BXcUCVk4VRNGtBLaWbXN7NYuquxxMNaQcEJ0eyAZssyKP2qqjM5yp5W6Hb4UxE_ExQOMbIEvtlyA45QZD5xQ0xx2m8-8D-3-R1gP_KYteT2rCrjyvTabkI-VnThwWfet9o1ddOl31NV26NQmcgHfzjpG6bMvrvf2s' 
+        {
+            id: 'wholebean',
+            title: language === 'es' ? 'Grano Entero' : 'Whole Bean',
+            desc: language === 'es' ? 'Máxima frescura' : 'Maximum freshness',
+            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJx8Et4HVW3XszhYo2FMkfFtOFIikw5gNxHBy11rrl6So9Tiz17P_1j6_81lwG1TcisB43pMoLHGfncypIsxoSVTUdOTG9xr2EmyREOu23Io9BXcUCVk4VRNGtBLaWbXN7NYuquxxMNaQcEJ0eyAZssyKP2qqjM5yp5W6Hb4UxE_ExQOMbIEvtlyA45QZD5xQ0xx2m8-8D-3-R1gP_KYteT2rCrjyvTabkI-VnThwWfet9o1ddOl31NV26NQmcgHfzjpG6bMvrvf2s'
         },
-        { 
-            id: 'ground', 
-            title: language === 'es' ? 'Molido' : 'Ground', 
-            desc: language === 'es' ? 'Perfecto para goteo' : 'Perfect for drip', 
-            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA2bY8lFrg2cg3H258mcqZHKtLGC1tTrXRMOcs2mnvRTEfdFIOjmi1qeqakfduZiGQom7VukTsD3ALlTANQljj-onP0bxnSiYK4JVMcyyDYP8nNIbMLOiZ0jcSWuR44K6dk4VcDWWvlqSKQNtdfPbd_Y3HbMdNseqMbXySVVndr-ZG5N_8zLjLM0uSAOAftQZCntXV0GndxxlJqIYrVn9MrRZQzu0_ifFSCh4Bd3GbJhMR3aV1150ha42M9HBNyUeWbd0rSkMsmy6Lv' 
+        {
+            id: 'ground',
+            title: language === 'es' ? 'Molido' : 'Ground',
+            desc: language === 'es' ? 'Perfecto para goteo' : 'Perfect for drip',
+            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA2bY8lFrg2cg3H258mcqZHKtLGC1tTrXRMOcs2mnvRTEfdFIOjmi1qeqakfduZiGQom7VukTsD3ALlTANQljj-onP0bxnSiYK4JVMcyyDYP8nNIbMLOiZ0jcSWuR44K6dk4VcDWWvlqSKQNtdfPbd_Y3HbMdNseqMbXySVVndr-ZG5N_8zLjLM0uSAOAftQZCntXV0GndxxlJqIYrVn9MrRZQzu0_ifFSCh4Bd3GbJhMR3aV1150ha42M9HBNyUeWbd0rSkMsmy6Lv'
         },
-        { 
-            id: 'capsules', 
-            title: language === 'es' ? 'Eco Cápsulas' : 'Eco Capsules', 
-            desc: language === 'es' ? 'Compatible Nespresso®' : 'Nespresso® Compatible', 
-            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-6scBBpQeR9q5CRlRJUac3X4Yni9tAmZKpgVY4by95o9sKATtPjIUozMp2smlDnmlsCeo0rGq7a3o5wkijfGmBaGLVceWE15q5IAtSnuG2T0Rc0V7G1pa7b4FuXzSinSOJXb2nRzPq18vIKb7QkaORrIgY9fn_dKxibuqe14bCelel4ymxQ2DjWBUUdeWko23ZKylI8_jZp-sgCY6nKJdFevE8oVmZJf4YjU_lmVhtxSHLvvfZdy8X_nBvHujd0QO7UK6pzjUez0f' 
+        {
+            id: 'capsules',
+            title: language === 'es' ? 'Eco Cápsulas' : 'Eco Capsules',
+            desc: language === 'es' ? 'Compatible Nespresso®' : 'Nespresso® Compatible',
+            img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-6scBBpQeR9q5CRlRJUac3X4Yni9tAmZKpgVY4by95o9sKATtPjIUozMp2smlDnmlsCeo0rGq7a3o5wkijfGmBaGLVceWE15q5IAtSnuG2T0Rc0V7G1pa7b4FuXzSinSOJXb2nRzPq18vIKb7QkaORrIgY9fn_dKxibuqe14bCelel4ymxQ2DjWBUUdeWko23ZKylI8_jZp-sgCY6nKJdFevE8oVmZJf4YjU_lmVhtxSHLvvfZdy8X_nBvHujd0QO7UK6pzjUez0f'
         }
     ];
 
@@ -64,7 +65,11 @@ const SubscriptionPage: React.FC = () => {
 
     return (
         <div className="bg-background-light dark:bg-background-dark min-h-screen pb-24 relative">
-            
+            <SEO
+                title="Suscripción Personalizada"
+                description="Únete al Círculo de Origen. Recibe café fresco de la Sierra Nevada en la puerta de tu casa con la frecuencia que elijas."
+            />
+
             {/* Success Modal */}
             {showSuccess && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -87,7 +92,7 @@ const SubscriptionPage: React.FC = () => {
                                 <span className="font-bold dark:text-white">Oct 28, 2023</span>
                             </div>
                         </div>
-                        <button 
+                        <button
                             onClick={() => { setShowSuccess(false); navigate('/'); }}
                             className="bg-primary hover:bg-primary-hover text-white font-bold py-3 px-8 rounded uppercase tracking-widest w-full transition-colors"
                         >
@@ -98,8 +103,8 @@ const SubscriptionPage: React.FC = () => {
             )}
 
             <div className="pt-32 pb-16 text-center px-4 relative">
-                 <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
-                    <img alt="Sierra Nevada Mountains" className="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLAqP7g-Ab101rA1carCS5LuycVStXSH47IZPy6ecdhKeG7sItcjqo7-tacKn_U-oIFQUjBbPoDeQWaMswZsDyVjU6VqaZyCg-mxg8Mrj1vg9dWDkbsmNoOyMam7lIeHnCM--ybM8bg9SgSGUfnSqLCd40oxH6_zVxTJvWUhdAiksKlcZVr_tt1INCvt9Q5RPX2CYjRNR6pYIkOQ3FsWfSp_fl31PtBn5aba2ypbUSgZOyfAaSkxoEAqw0-_rgHSHjNKOQlkxd5kPS"/>
+                <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
+                    <img alt="Sierra Nevada Mountains" className="w-full h-full object-cover grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLAqP7g-Ab101rA1carCS5LuycVStXSH47IZPy6ecdhKeG7sItcjqo7-tacKn_U-oIFQUjBbPoDeQWaMswZsDyVjU6VqaZyCg-mxg8Mrj1vg9dWDkbsmNoOyMam7lIeHnCM--ybM8bg9SgSGUfnSqLCd40oxH6_zVxTJvWUhdAiksKlcZVr_tt1INCvt9Q5RPX2CYjRNR6pYIkOQ3FsWfSp_fl31PtBn5aba2ypbUSgZOyfAaSkxoEAqw0-_rgHSHjNKOQlkxd5kPS" />
                 </div>
                 <div className="relative z-10">
                     <span className="block text-primary font-display tracking-[0.2em] text-sm mb-4 uppercase">{t('sub.hero_sub')}</span>
@@ -128,8 +133,8 @@ const SubscriptionPage: React.FC = () => {
                     <h2 className="text-3xl font-display text-center text-gray-900 dark:text-white mb-2">{t('sub.flavor_title')}</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
                         {flavors.map(f => (
-                            <div 
-                                key={f.id} 
+                            <div
+                                key={f.id}
                                 onClick={() => setFlavorId(f.id)}
                                 className={`cursor-pointer h-full p-8 border rounded-sm flex flex-col items-center text-center relative overflow-hidden transition-all ${flavorId === f.id ? 'border-primary bg-primary/5 dark:bg-surface-dark' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark hover:border-primary/50'}`}
                             >
@@ -149,8 +154,8 @@ const SubscriptionPage: React.FC = () => {
                     <h2 className="text-3xl font-display text-center text-gray-900 dark:text-white mb-10">{t('sub.format_title')}</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         {formats.map(fmt => (
-                            <div 
-                                key={fmt.id} 
+                            <div
+                                key={fmt.id}
                                 onClick={() => setFormatId(fmt.id)}
                                 className={`cursor-pointer p-6 border rounded-sm flex flex-col items-center text-center relative transition-all ${formatId === fmt.id ? 'border-primary bg-primary/5 dark:bg-surface-dark' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark hover:border-primary/50'}`}
                             >
@@ -168,8 +173,8 @@ const SubscriptionPage: React.FC = () => {
                     <h2 className="text-3xl font-display text-center text-gray-900 dark:text-white mb-10">{t('sub.frequency_title')}</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {frequencies.map(freq => (
-                            <div 
-                                key={freq.id} 
+                            <div
+                                key={freq.id}
                                 onClick={() => setFrequencyId(freq.id)}
                                 className={`cursor-pointer p-8 border rounded-sm flex flex-col items-center text-center relative transition-all ${frequencyId === freq.id ? 'border-primary bg-primary/5 dark:bg-surface-dark' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark hover:border-primary/50'}`}
                             >
@@ -201,7 +206,7 @@ const SubscriptionPage: React.FC = () => {
                                 <span className="text-4xl font-display font-bold text-gray-900 dark:text-white">{formatPrice(21.60)}</span>
                                 <span className="text-sm text-gray-500 ml-1">{t('sub.shipment')}</span>
                             </div>
-                            <button 
+                            <button
                                 onClick={handleSubscribe}
                                 className="bg-primary hover:bg-primary-hover text-white font-bold py-4 px-10 rounded-sm shadow-lg shadow-primary/30 transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                             >

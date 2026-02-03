@@ -116,4 +116,32 @@ Existía una discrepancia entre los logs de las herramientas de IA (MCP) y los a
 **Prevención:**
 Usar comandos de terminal (cat/type) para verificar archivos de entorno críticos cuando el visor de archivos estándar esté restringido.
 
+### [2026-02-03 15:50] - 💣 Error: Template Literal Roto en emailService.ts
+**Categoría:** Desarrollo / Sintaxis
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+Durante un proceso coordinado de cambio de terminología y generalización de URLs, una mala selección de rango en la herramienta de edición (`multi_replace_file_content`) eliminó accidentalmente el cierre de un template literal y parte de la lógica del servicio de correos en `emailService.ts`.
+
+**Solución Exitosa:**
+Se reconstruyó la estructura de la función `sendOrderNotification`, restaurando los cierres de backticks y la lógica de invocación de Supabase.
+
+**Prevención:**
+Verificar siempre el contenido exacto de las líneas antes de realizar reemplazos masivos que incluyan caracteres de control como backticks o llaves anidadas.
+
+### [2026-02-03 17:15] - 🚀 Error: Comando zrok no reconocido
+**Categoría:** Infraestructura / PATH
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+El comando `zrok` no se reconocía en el terminal de la sesión de trabajo, impidiendo la activación del túnel público `origen2025`.
+
+**Solución Exitosa:**
+1. Se localizó el ejecutable en `C:\zrok_1.1.10\zrok.exe`.
+2. Se ejecutó el comando de activación usando la ruta absoluta y la sintaxis simplificada para reservas existentes: `C:\zrok_1.1.10\zrok.exe share reserved origen2025`.
+3. Se verificó que el uso del flag `--target` es innecesario si la reserva ya incluye el destino.
+
+**Prevención:**
+Documentar rutas absolutas de herramientas de red en `Conditions.txt` o agregarlas al PATH permanente del sistema operativo.
+
 ---

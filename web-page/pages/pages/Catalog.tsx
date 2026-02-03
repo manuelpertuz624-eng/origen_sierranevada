@@ -7,6 +7,7 @@ import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 
 const Catalog: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -44,6 +45,10 @@ const Catalog: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#050806] text-white pt-32 font-sans">
+            <SEO
+                title="Catálogo de Origen"
+                description="Explora nuestra selección exclusiva de cafés de especialidad. Desde granos de altura hasta ediciones limitadas de la Sierra Nevada."
+            />
             <div className="container mx-auto px-6 max-w-7xl">
                 <header className="mb-16 text-center space-y-4">
                     <div className="inline-block py-1 px-4 border border-[#C5A065]/30 rounded-full bg-[#C5A065]/5">
@@ -70,6 +75,7 @@ const Catalog: React.FC = () => {
                                     <img
                                         src={product.image_url || '/cafe_malu_full_composition.png'}
                                         alt={product.name[lang]}
+                                        loading="lazy"
                                         className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] transform group-hover:scale-110 transition-transform duration-700"
                                     />
 

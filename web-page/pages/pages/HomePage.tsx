@@ -6,6 +6,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useCart } from '../contexts/CartContext';
 import { productService } from '../services/productService';
 import { Product } from '../types';
+import SEO from '../components/SEO';
 
 
 const HomePage: React.FC = () => {
@@ -57,6 +58,11 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="min-h-screen">
+            <SEO
+                title="El Ritual del Café de Especialidad"
+                description="Experimenta el café más puro de Colombia, cultivado en la Sierra Nevada de Santa Marta. Notas de chocolate, nuez y caramelo."
+                keywords="café de especialidad, minca, sierra nevada, café premium colombia"
+            />
             {/* Hero Section */}
             <header className="relative min-h-screen w-full overflow-hidden flex items-center bg-[#050806] pt-32 lg:pt-0">
 
@@ -218,6 +224,7 @@ const HomePage: React.FC = () => {
                                         <img
                                             src={product.image_url || '/cafe_malu_full_composition.png'}
                                             alt={product.name[lang]}
+                                            loading="lazy"
                                             className="w-full h-full object-contain filter drop-shadow-2xl transform group-hover:scale-110 transition-transform duration-700"
                                         />
                                         <div className="absolute top-4 right-4">

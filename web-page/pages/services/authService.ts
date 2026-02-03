@@ -37,9 +37,17 @@ export const authService = {
 
             if (profile && profile.status !== 'active') {
                 await supabase.auth.signOut(); // Block session
+                let message = `Tu cuenta está en estado: ${profile.status}.`;
+
+                if (profile.status === 'pending') {
+                    message = "Tu ritual está en proceso. Tu cuenta está en espera de autorización por parte de nuestros sumilleres.";
+                } else if (profile.status === 'banned') {
+                    message = "Esta cuenta ha sido restringida por motivos de seguridad.";
+                }
+
                 return {
                     data: { user: null, session: null },
-                    error: { message: `Tu cuenta está en estado: ${profile.status}. Por favor contacta al administrador.` } as any
+                    error: { message } as any
                 };
             }
         }

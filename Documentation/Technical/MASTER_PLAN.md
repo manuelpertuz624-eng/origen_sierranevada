@@ -30,26 +30,36 @@ Este es el documento central de verdad única para el proyecto. Consolida la vis
 ## 🛠️ Registro de Avances Recientes (Timeline)
 
 ### [2026-02-03 15:15] - 🎉 Misión Cumplida: Círculo Interno Operativo
-*   **Workflow de Curaduría**: Sistema 100% validado. Registro -> Alerta Real -> Aprobación -> Bienvenida Heroica.
+*   **Workflow de Autorización**: Sistema 100% validado. Registro -> Alerta Real -> Aprobación -> Bienvenida Heroica.
 *   **Dashboard de Comando**: Implementación de alertas inteligentes y secciones de prioridad en el Panel Admin.
+*   **Terminología**: Ajuste de "Curaduría" a "En espera de autorización" para alinearse con el contexto local (Colombia).
 *   **Technical Done**: Registro exhaustivo de soluciones de infraestructura y seguridad en el `ERROR_LOG.md`.
 
-**Estado Actual**: Núcleo de membresía y administración finalizado.
-**Siguiente Paso**: 💳 **Fase 5: Ritual de Pago (Pasarela)** e integración de pedidos reales.
+### [2026-02-03 16:15] - 💳 Fase 5: Ritual de Pago e Infraestructura de Pedidos
+*   **Gestión de Pedidos**: Creación de tablas `orders` y `order_items` con RLS.
+*   **Checkout**: Implementación de la página de pago con resumen de carrito y descuento de miembros.
+*   **Logística**: Sistema de cálculo de envío dinámico por ciudad (`shippingService.ts`).
+*   **Inventario**: Sincronización de stock automática (resta de unidades tras compra).
+*   **Post-Venta**: Automatización de correos de confirmación para el cliente (`sendCustomerOrderEmail`).
+*   **Pasarela de Pago**: Integración estructural con `paymentService` (Simulación PoliPay/Integra).
 
-### [2026-02-02] - Seguridad y Experiencia de Usuario
-*   **Módulo Legal**: Implementación de Cookie Banner (Habeas Data) y Checkbox de términos.
+### [2026-02-03 16:30] - 🚀 Fase 6: Optimización SEO & Performance
+*   **SEO Dinámico**: Implementación del componente `<SEO />` para gestión de meta-tags, títulos y Open Graph por página.
+*   **Performance (Bundle Splitting)**: Migración a `React.lazy` y `Suspense` para carga bajo demanda de rutas, reduciendo el peso inicial del bundle.
+*   **Eficiencia Visual**: Implementación de `loading="lazy"` en todo el catálogo de productos y secciones pesadas de imágenes.
+*   **Indexación**: Configuración de meta-datos base en `index.html` para mejorar el posicionamiento en buscadores.
 *   **Dashboard Admin**: Sistema de gestión de productos y aprobación de usuarios.
 *   **Branding Hero**: Perfeccionamiento del "Pop-Out Ring System" (Efecto 3D del anillo).
-*   **Túnel Zrok**: Lanzamiento de la reserva `origen2025`.
+*   **Túnel Zrok**: Restauración y estabilización del túnel `origen2025` mediante ruta absoluta.
 
 ---
 
 ## 🗺️ Hoja de Ruta (Next Steps)
-1.  [ ] **Pasarela de Pagos**: Integración con PoliPay / Integra.
-2.  [ ] **Admin UI**: Pulido final de filtros en el gestor de productos.
-3.  [ ] **Pruebas de Estrés**: Simulación de carga masiva de usuarios y validación de seguridad.
-4.  [ ] **SEO & Performance**: Optimización de imágenes y meta-tags para buscadores.
+1.  [x] **Logística**: Configuración de reglas de envío por ciudad/departamento (`shippingService.ts`).
+2.  [x] **Inventario Dinámico**: Sincronización automática de stock tras cada compra (Implementado en `CheckoutPage`).
+3.  [x] **Post-Venta**: Automatización del email de confirmación de pago para clientes (`sendCustomerOrderEmail`).
+4.  [ ] **Pasarela Real**: Reemplazar simulación por credenciales reales de Redeban/Integra cuando estén disponibles.
+5.  [ ] **Dashboard de Usuario**: Visualización de historial de pedidos para clientes.
 
 ---
 
