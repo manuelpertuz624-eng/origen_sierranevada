@@ -202,7 +202,7 @@ export const emailService = {
                                         </div>
                                         <div class="total">
                                             <span>Total Pagado:</span>
-                                            <span style="float: right;">$${orderDetails.total.toFixed(2)}</span>
+                                            <span style="float: right;">USD ${orderDetails.total.toFixed(2)}</span>
                                         </div>
                                     </div>
 

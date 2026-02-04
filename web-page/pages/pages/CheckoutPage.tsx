@@ -7,6 +7,7 @@ import { supabase } from '../services/supabaseClient';
 import { emailService } from '../services/emailService';
 import { paymentService } from '../services/paymentService';
 import { shippingService } from '../services/shippingService';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface CheckoutForm {
     fullName: string;
@@ -21,6 +22,7 @@ interface CheckoutForm {
 const CheckoutPage: React.FC = () => {
     const { cartItems, cartTotal, clearCart } = useCart();
     const { user } = useAuth();
+    const { formatPrice } = useLanguage();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
@@ -312,7 +314,7 @@ const CheckoutPage: React.FC = () => {
                                                     <p className="text-[10px] text-gray-500 uppercase">{item.qty} unidad(es)</p>
                                                 </div>
                                             </div>
-                                            <p className="text-sm font-bold text-[#C5A065]">${(item.price * item.qty).toFixed(2)}</p>
+                                            <p className="text-sm font-bold text-[#C5A065]">{formatPrice(item.price * item.qty)}</p>
                                         </div>
                                     ))}
                                     {cartItems.length === 0 && (
@@ -323,23 +325,23 @@ const CheckoutPage: React.FC = () => {
                                 <div className="space-y-3 border-t border-white/10 pt-6">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-400">Subtotal</span>
-                                        <span>${cartTotal.toFixed(2)}</span>
+                                        <span>{formatPrice(cartTotal)}</span>
                                     </div>
                                     {discount > 0 && (
                                         <div className="flex justify-between text-sm text-green-400">
                                             <span>Descuento Miembro (10%)</span>
-                                            <span>-${discount.toFixed(2)}</span>
+                                            <span>-{formatPrice(discount)}</span>
                                         </div>
                                     )}
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-400">Envío</span>
                                         <span className={shippingCost === 0 && form.city ? "text-green-400 font-bold text-xs" : "text-white"}>
-                                            {form.city ? (shippingCost === 0 ? '¡GRATIS!' : `$${shippingCost.toFixed(2)}`) : 'Calculado en checkout'}
+                                            {form.city ? (shippingCost === 0 ? '¡GRATIS!' : formatPrice(shippingCost)) : 'Calculado en checkout'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between text-xl font-serif pt-4 border-t border-white/10">
                                         <span className="text-white">Total</span>
-                                        <span className="text-[#C5A065]">${finalTotal.toFixed(2)}</span>
+                                        <span className="text-[#C5A065]">{formatPrice(finalTotal)}</span>
                                     </div>
                                 </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import Logo from './Logo';
 
 const Footer: React.FC = () => {
     const { t } = useLanguage();
@@ -25,7 +26,7 @@ const Footer: React.FC = () => {
                 {/* Brand */}
                 <div className="lg:col-span-1 text-center md:text-left">
                     <span className="font-accent text-xs tracking-[0.3em] text-primary mb-4 block">EST. 2025</span>
-                    <img src="/logo-origen-sierra-nevada.svg" alt="Origen Sierra Nevada" className="h-16 w-auto mb-6 mx-auto md:mx-0 filter brightness-110 drop-shadow-[0_0_10px_rgba(197,160,101,0.2)]" />
+                    <Logo className="h-16 xl:h-20 w-auto mb-6 mx-auto md:mx-0 filter brightness-110 drop-shadow-[0_0_15px_rgba(197,160,101,0.2)]" />
                     <p className="text-gray-400 text-sm leading-relaxed mb-6">
                         Bringing the spirit of the mountain to your morning ritual. Sustainably grown, ethically sourced, and roasted to perfection.
                     </p>

@@ -126,7 +126,26 @@ const translations: Record<string, Record<Language, string>> = {
 
     // Common
     'common.loading': { es: 'Cargando...', en: 'Loading...' },
-    'common.error': { es: 'Error', en: 'Error' }
+    'common.error': { es: 'Error', en: 'Error' },
+
+    // Dashboard
+    'dash.welcome': { es: 'Hola, ', en: 'Hello, ' },
+    'dash.member_since': { es: 'Miembro Origen desde ', en: 'Origen Member since ' },
+    'dash.tab.overview': { es: 'Mi Origen', en: 'My Origen' },
+    'dash.tab.orders': { es: 'Mis Pedidos', en: 'My Orders' },
+    'dash.tab.settings': { es: 'Configuración', en: 'Settings' },
+    'dash.tab.legal': { es: 'Legales', en: 'Legal' },
+    'dash.benefit.title': { es: 'Tu Beneficio Exclusivo', en: 'Your Exclusive Benefit' },
+    'dash.benefit.desc': { es: 'Como miembro registrado, tienes un descuento permanente del 10% en toda nuestra colección de cafés de especialidad.', en: 'As a registered member, you have a permanent 10% discount on our entire collection of specialty coffees.' },
+    'dash.benefit.cta': { es: 'Usar Descuento', en: 'Use Discount' },
+    'dash.orders.title': { es: 'Historial de Pedidos', en: 'Order History' },
+    'dash.orders.empty': { es: 'Aún no has realizado ningún pedido.', en: 'You haven\'t placed any orders yet.' },
+    'dash.orders.cta': { es: 'Hacer mi primer pedido', en: 'Place my first order' },
+    'dash.status.pending': { es: 'En espera', en: 'Pending' },
+    'dash.status.paid': { es: 'Confirmado', en: 'Confirmed' },
+    'dash.status.shipped': { es: 'En camino', en: 'Shipped' },
+    'dash.status.delivered': { es: 'Entregado', en: 'Delivered' },
+    'dash.status.cancelled': { es: 'Cancelado', en: 'Cancelled' }
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -147,12 +166,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         return translations[key]?.[language] || defaultText || key;
     };
 
-    const formatPrice = (priceBaseCOP: number) => {
-        if (currency === 'USD') {
-            const priceUSD = priceBaseCOP / 4000;
-            return `$${priceUSD.toFixed(2)}`;
+    const formatPrice = (priceUSD: number) => {
+        if (currency === 'COP') {
+            const priceCOP = priceUSD * 4000;
+            return `$${priceCOP.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`;
         } else {
-            return `$${priceBaseCOP.toLocaleString('es-CO')}`;
+            return `USD ${priceUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
     };
 

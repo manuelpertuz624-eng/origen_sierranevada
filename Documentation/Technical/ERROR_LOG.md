@@ -145,3 +145,44 @@ El comando `zrok` no se reconocía en el terminal de la sesión de trabajo, impi
 Documentar rutas absolutas de herramientas de red en `Conditions.txt` o agregarlas al PATH permanente del sistema operativo.
 
 ---
+
+### [2026-02-03 22:30] - 🖼️ Error: Inconsistencia Visual en Fuentes del Logo
+**Categoría:** Frontend / UI
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+El logo en formato texto/SVG mostraba fuentes genéricas ("Times New Roman") en dispositivos que no tenían instaladas las fuentes locales (`Playfair Display` y `Papyrus`), rompiendo la identidad visual de "Origen Sierra Nevada".
+
+**Solución Exitosa:**
+1. **Embebido Base64:** Se inyectaron los archivos de fuente `.woff2` y `.ttf` directamente en `index.css` como cadenas Base64 para garantizar su disponibilidad.
+2. **Estrategia Dual (Responsive):** Se reescribió `Logo.tsx` para usar una imagen PNG de alta fidelidad (`logo-completo.png`) en dispositivos móviles/tablets (garantía total de diseño) y mantener el SVG vectorial en Desktop para nitidez, ahora respaldado por las fuentes embebidas.
+
+**Prevención:**
+No confiar en fuentes del sistema para elementos de marca críticos. Usar siempre imágenes o vectores con fuentes trazadas (paths) o embebidas.
+
+---
+
+### [2026-02-03 22:45] - 🧱 Error: Iconos de Navegación Rotos (Showing Text)
+**Categoría:** dependencias / HTML
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+Tras asegurar las fuentes del logo, los iconos del menú principal (Cuenta, Carrito, Búsqueda) dejaron de verse, mostrando en su lugar el texto literal del icono (ej. "shopping_bag", "search").
+
+**Causa Raíz:**
+Durante la edición de `index.html` para temas de SEO, se eliminaron accidentalmente los enlaces CDN a `Material Icons` y `Google Fonts`.
+
+**Solución Exitosa:**
+Se restauraron las etiquetas `<link>` críticas en el `<head>` de `index.html` para `Material Icons Outlined` y las familias tipográficas del proyecto (`Playfair`, `Poppins`, `Montserrat`).
+
+---
+
+### [2026-02-03 22:55] - 🔌 Error: 502 Bad Gateway (Servidor Desarrollo Caído)
+**Categoría:** Infraestructura / Vite
+**Estado:** ✅ SOLUCIONADO
+
+**Descripción:**
+El túnel público `zrok` reportó un error "502 Bad Gateway", haciendo inaccesible el sitio externamente.
+
+**Solución Exitosa:**
+Se diagnosticó que el proceso de desarrollo local (`npm run dev`) se había detenido silenciosamente. Se reinició el proceso en el puerto estándar `5173` y se verificó la recuperación inmediata del servicio.

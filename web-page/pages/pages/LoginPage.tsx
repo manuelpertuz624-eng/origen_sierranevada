@@ -65,8 +65,8 @@ const LoginPage: React.FC = () => {
             <div className="w-full max-w-md bg-zinc-900/50 backdrop-blur-md border border-[#C5A065]/20 p-8 rounded-2xl shadow-[0_0_50px_rgba(197,160,101,0.1)]">
 
                 <div className="text-center mb-10">
-                    <div className="inline-block relative mb-6">
-                        <img src="/logo-origen-sierra-nevada.svg" alt="Origen Sierra Nevada" className="h-28 w-auto mx-auto object-contain drop-shadow-[0_0_20px_rgba(197,160,101,0.2)] filter brightness-110" />
+                    <div className="inline-block relative mb-8">
+                        <img src="/logo-completo.svg" alt="Origen Sierra Nevada" className="h-20 sm:h-24 md:h-28 w-auto mx-auto object-contain drop-shadow-[0_0_30px_rgba(197,160,101,0.3)] brightness-125" />
                     </div>
 
                     <h2 className="font-display text-3xl text-white mb-2 tracking-wide">Bienvenido</h2>

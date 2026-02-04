@@ -28,7 +28,7 @@ const UserDashboard = lazy(() => import('./pages/UserDashboard'));
 const PageLoader = () => (
     <div className="min-h-screen bg-[#050806] flex flex-col items-center justify-center">
         <div className="w-12 h-12 border-2 border-[#C5A065]/20 border-t-[#C5A065] rounded-full animate-spin mb-4"></div>
-        <img src="/logo-origen-sierra-nevada.svg" alt="Origen" className="w-24 opacity-50" />
+        <img src="/logo-completo.svg" alt="Origen" className="h-16 w-auto opacity-70 brightness-110" />
     </div>
 );
 

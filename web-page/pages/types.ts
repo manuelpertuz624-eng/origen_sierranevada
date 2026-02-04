@@ -29,13 +29,20 @@ export interface AuthState {
 export type Multilingual = Record<LanguageCode, string>;
 export type MultilingualTags = Record<LanguageCode, string[]>;
 
+export interface ProductVariant {
+    id: string;
+    name: string; // e.g. "250g", "500g", "1kg" or "Small", "Large"
+    price: number;
+    stock: number;
+}
+
 export interface Product {
     id: string;
     category: 'coffee' | 'accessories' | 'derivatives';
     name: Multilingual;
-    price: number;
+    price: number; // Base price (Starting at)
     image_url: string;
-    stock: number;
+    stock: number; // General stock or aggregate
     description: Multilingual;
     story: Multilingual;
     tags: MultilingualTags;
@@ -44,6 +51,7 @@ export interface Product {
     color: string;
     mask_type: 'pop' | 'static';
     overlay_url?: string;
+    variants?: ProductVariant[];
     created_at?: string;
 }
 
@@ -61,6 +69,7 @@ export interface ProductInput {
     color: string;
     mask_type: 'pop' | 'static';
     overlay_url?: string;
+    variants?: ProductVariant[];
 }
 
 // Subscription related types

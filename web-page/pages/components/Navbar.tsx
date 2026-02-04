@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import Logo from './Logo';
 
 const DarkModeToggle = () => {
     const toggleTheme = () => {
@@ -26,6 +27,8 @@ const Navbar: React.FC = () => {
     const { language, toggleLanguage, t, formatPrice } = useLanguage();
     const { user, isAdmin } = useAuth();
     const { cartItems, removeFromCart, updateQty, cartTotal, isCartOpen, setIsCartOpen } = useCart();
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
     // State for interactions
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -60,57 +63,50 @@ const Navbar: React.FC = () => {
                 : 'bg-gradient-to-b from-black/80 to-transparent border-b border-transparent'
                 }`}>
 
-                {/* 1. MOBILE LAYOUT (Stacked) - Visible only on LG and below */}
-                <div className="w-full lg:hidden flex flex-col bg-[#050806] border-b border-white/10 shadow-xl">
-                    {/* Top Tier: Logo Throne */}
-                    <div className="w-full flex justify-center py-3 border-b border-white/5">
-                        <img
-                            src="/logo-origen-sierra-nevada.svg"
-                            alt="Origen Sierra Nevada"
-                            className="h-10 w-auto max-w-[180px] object-contain drop-shadow-md filter brightness-110"
-                            onClick={() => navigate('/')}
+                {/* 1. MOBILE LAYOUT (Two-Tier) - As requested: Logo on top, icons below */}
+                <div className="w-full lg:hidden flex flex-col bg-background-dark/95 backdrop-blur-md border-b border-white/10 shadow-xl overflow-hidden">
+
+                    {/* Tier 1: Logo Throne (Centered) */}
+                    <div className="w-full flex justify-center py-5 border-b border-white/5 cursor-pointer" onClick={() => navigate('/')}>
+                        <Logo
+                            className="h-9 sm:h-11 md:h-14 w-auto object-contain drop-shadow-xl brightness-110"
                         />
                     </div>
 
-                    {/* Bottom Tier: Control Bar */}
-                    <div className="w-full flex justify-between items-center px-6 py-3">
-                        {/* Left: Menu Trigger */}
-                        <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-white hover:text-primary transition-colors p-1"
-                        >
-                            <span className="material-icons-outlined text-xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
-                        </button>
+                    {/* Tier 2: Icons & Actions (Balanced Row) */}
+                    <div className="w-full flex justify-between items-center px-4 py-2 bg-white/[0.02]">
+                        {/* Left: Menu & Search */}
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                className="text-white hover:text-primary transition-colors p-2"
+                            >
+                                <span className="material-icons-outlined text-2xl">{isMobileMenuOpen ? 'close' : 'menu'}</span>
+                            </button>
+                            <button
+                                onClick={() => setIsSearchOpen(true)}
+                                className="text-white hover:text-primary transition-colors p-2"
+                            >
+                                <span className="material-icons-outlined text-xl">search</span>
+                            </button>
+                        </div>
 
-                        {/* Right: Actions */}
-                        <div className="flex items-center gap-3">
-                            {/* Language (Mobile) */}
+                        {/* Right: Language & Cart */}
+                        <div className="flex items-center gap-1">
                             <button
                                 onClick={toggleLanguage}
-                                className="text-white text-[10px] font-accent border border-white/20 rounded px-1.5 py-0.5 hover:border-primary hover:text-primary transition-colors"
+                                className="text-white text-[10px] font-accent border border-white/10 rounded-full px-2.5 py-1 hover:border-primary hover:text-primary transition-colors mr-1"
                             >
                                 {language.toUpperCase()}
                             </button>
 
-                            {/* Dark Mode (Mobile) */}
-                            <div className="scale-75 origin-center">
-                                <DarkModeToggle />
-                            </div>
-
-                            <button
-                                onClick={() => setIsSearchOpen(true)}
-                                className="text-white hover:text-primary transition-colors p-1 ml-2"
-                            >
-                                <span className="material-icons-outlined text-xl">search</span>
-                            </button>
-
                             <div
-                                className="relative cursor-pointer text-white hover:text-primary transition-colors p-1"
+                                className="relative cursor-pointer text-white hover:text-primary transition-colors p-2"
                                 onClick={() => setIsCartOpen(true)}
                             >
-                                <span className="material-icons-outlined text-xl">shopping_bag</span>
+                                <span className="material-icons-outlined text-2xl">shopping_bag</span>
                                 {cartItems.length > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-primary text-background-dark text-[9px] font-bold h-3.5 w-3.5 flex items-center justify-center rounded-full border border-black">
+                                    <span className="absolute top-1 right-1 bg-primary text-background-dark text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-black">
                                         {cartItems.length}
                                     </span>
                                 )}
@@ -127,19 +123,17 @@ const Navbar: React.FC = () => {
                         className="flex items-center gap-3 group cursor-pointer"
                         onClick={() => navigate('/')}
                     >
-                        <img
-                            src="/logo-origen-sierra-nevada.svg"
-                            alt="Origen Sierra Nevada"
-                            className={`transition-all duration-500 ${isScrolled ? 'h-10' : 'h-12'} w-auto drop-shadow-md`}
+                        <Logo
+                            className={`transition-all duration-500 ${isScrolled ? 'h-9 xl:h-10' : 'h-14 xl:h-16'} w-auto drop-shadow-2xl brightness-110 group-hover:scale-105 transform`}
                         />
                     </div>
 
 
-                    {/* Desktop Menu */}
+                    {/* Desktop Menu - Conditional or Simplified */}
                     <div className="flex items-center space-x-8 font-display text-sm tracking-widest text-white">
-                        <Link to="/catalog?filter=coffee" className="hover:text-primary transition-colors">CAFÉ ORIGEN</Link>
-                        <Link to="/catalog?filter=accessories" className="hover:text-primary transition-colors">ACCESORIOS</Link>
-                        <Link to="/catalog?filter=derivates" className="hover:text-primary transition-colors">DERIVADOS</Link>
+                        {!isHome && (
+                            <Link to="/catalog" className="hover:text-primary transition-colors text-[10px] font-bold uppercase tracking-[0.3em]">Catálogo Completo</Link>
+                        )}
                         {isAdmin && (
                             <Link to="/admin" className="hover:text-white transition-colors text-[#C5A065] border border-[#C5A065]/50 px-3 py-1 rounded-full bg-[#C5A065]/5 flex items-center gap-2 hover:bg-[#C5A065] hover:border-[#C5A065] hover:text-black transition-all">
                                 <span className="material-icons-outlined text-sm">admin_panel_settings</span>
@@ -255,10 +249,10 @@ const Navbar: React.FC = () => {
                         </button>
                     )}
 
-                    <Link to="/" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">{t('nav.home')}</Link>
-                    <Link to="/catalog?filter=coffee" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">CAFÉ ORIGEN</Link>
-                    <Link to="/catalog?filter=accessories" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">ACCESORIOS</Link>
-                    <Link to="/catalog?filter=derivates" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3">DERIVADOS</Link>
+                    <Link to="/" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.home')}</Link>
+                    {!isHome && (
+                        <Link to="/catalog" className="text-xl font-display font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-3" onClick={() => setIsMobileMenuOpen(false)}>CATÁLOGO</Link>
+                    )}
 
                     {isAdmin && (
                         <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-display font-bold text-[#C5A065] border-b border-[#C5A065]/20 pb-3 flex items-center justify-between">

@@ -120,7 +120,7 @@ const RegisterPage: React.FC = () => {
 
                 <div className="text-center mb-8">
                     <div className="inline-block relative mb-4">
-                        <img src="/logo-origen-sierra-nevada.svg" alt="Origen Sierra Nevada" className="h-20 w-auto mx-auto object-contain drop-shadow-[0_0_15px_rgba(197,160,101,0.3)] filter brightness-110" />
+                        <img src="/logo-completo.svg" alt="Origen Sierra Nevada" className="h-24 w-auto mx-auto object-contain drop-shadow-[0_0_25px_rgba(197,160,101,0.3)] brightness-110" />
                     </div>
                     <h2 className="font-display text-2xl text-white mb-2 tracking-wide">Únete al Origen</h2>
                     <p className="text-white/60 text-sm font-light">Crea tu cuenta y reencuentrate con tu Origen.</p>
